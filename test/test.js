@@ -1,4 +1,17 @@
 /*__________________________________________Configuration_____________________________________________________________*/
+// For npm purposes
+/*var Storage = require('dom-storage');
+var jsdom = require('jsdom');
+const { JSDOM } = jsdom;
+const { window } = new JSDOM();
+const { document } = (new JSDOM('')).window;
+global.document = document;
+
+var $ = jQuery = require('jquery')(window);
+
+// in-memory, does call `String(val)` on values (i.e. `{}` becomes `'[object Object]'`
+var sessionStorage = new Storage(null, { strict: true });*/
+
 let now = new Date(2008,1,3,5,56,36);
 sessionStorage.setItem('earliestDate',now.toISOString());
 sessionStorage.setItem('datesTable',JSON.stringify([
