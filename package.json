@@ -4,10 +4,11 @@
   "description": "Web Testing Models for https://msp.dcgroup.com",
   "main": "test/test.js",
   "directories": {
-    "test": "test"
+    "test": "test",
   },
   "scripts": {
-    "test": "node ./test/run-driver.js"
+    "test": "karma start",
+    "sel_test" : "node test/run-driver.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,10 @@
   },
   "homepage": "https://gitlab.com/mwa28/DataConsult-Testing#README",
   "devDependencies": {
+    "karma": "^2.0.4",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "karma-qunit": "^2.1.0",
     "node-qunit-phantomjs": "^2.0.0",
     "phantomjs-prebuilt": "^2.1.16",
     "qunit": "^2.6.1",
