@@ -1,26 +1,26 @@
-/*__________________________________________Configuration_____________________________________________________________*/
-// For npm purposes
+/*__________________________________________Runtime Options___________________________________________________________*/
+// To mock a session Storage
 /*var Storage = require('dom-storage');
-var jsdom = require('jsdom');
+var sessionStorage = new Storage(null, { strict: true });*/
+// To define $ func of JQuery
+/*var jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 const { window } = new JSDOM();
 const { document } = (new JSDOM('')).window;
 global.document = document;
 
-var $ = jQuery = require('jquery')(window);
+var $ = jQuery = require('jquery')(window);*/
 
-// in-memory, does call `String(val)` on values (i.e. `{}` becomes `'[object Object]'`
-var sessionStorage = new Storage(null, { strict: true });*/
-
-let now = new Date(2008,1,3,5,56,36);
-sessionStorage.setItem('earliestDate',now.toISOString());
-sessionStorage.setItem('datesTable',JSON.stringify([
+/*__________________________________________Configuration_____________________________________________________________*/
+var now = new Date(2008,1,3,5,56,36);
+var earliestDate = now.toISOString();
+var datesTable = JSON.stringify([
     new Date(2008,5,3,8,56,39),
     new Date(2009,6,5,8,7,2),
     new Date(2008,1,3,5,56,36),
     new Date (2003,5,20,5,30,15)
-]));
-sessionStorage.setItem('allSites', JSON.stringify([
+]);
+var allSites = JSON.stringify([
     {SiteID: "549", SiteName: "Azadea", SiteCountry: "Lebanon", SiteCountryCode: "2"},
     {SiteID: "617", SiteName: "Credit Libanais", SiteCountry: "Lebanon", SiteCountryCode: "2"},
     {SiteID: "601", SiteName: "Delta Trading Co.", SiteCountry: "Lebanon", SiteCountryCode: "2"},
@@ -34,8 +34,8 @@ sessionStorage.setItem('allSites', JSON.stringify([
     {SiteID: "621", SiteName: "SGBL", SiteCountry: "Lebanon", SiteCountryCode: "2"},
     {SiteID: "563", SiteName: "Tech Hub", SiteCountry: "Lebanon", SiteCountryCode: "2"},
     {SiteID: "437", SiteName: "TEST PORTAL", SiteCountry: "Lebanon", SiteCountryCode: "2"},
-    {SiteID: "616", SiteName: "TESTING", SiteCountry: "lebanon", SiteCountryCode: "2"}]));
-sessionStorage.setItem('allCountries', JSON.stringify([
+    {SiteID: "616", SiteName: "TESTING", SiteCountry: "lebanon", SiteCountryCode: "2"}]);
+var allCountries = JSON.stringify([
     {CountryID:3,    CountryName: "Afghanistan"},
     {CountryID:4,    CountryName: "Albania"},
     {CountryID:5,    CountryName: "Algeria"},
@@ -165,10 +165,10 @@ sessionStorage.setItem('allCountries', JSON.stringify([
     {CountryID:125,  CountryName:"Yemen"},
     {CountryID:126,  CountryName:"Zimbabwe"}
 
-]));
-let monthNames = [
+]);
+var monthNames = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-let siteIndicator="exst";
+var siteIndicator="exst";
 $(document).ready(function() {
     $('#myModal').hide();
     $("#title").val("");
@@ -192,27 +192,26 @@ $(document).ready(function() {
         $('#fillNewSite').show(500);
         siteIndicator="new";
     });
-    fillModal(JSON.parse(sessionStorage.getItem('allSites')), JSON.parse(sessionStorage.getItem('allCountries')));
+    fillModal(JSON.parse(allSites), JSON.parse(allCountries));
 });
 function fillModal(sites,countries){
     $('#site').empty();
     $('#country').empty();
     $('#country').append('<option disabled selected value class="text-muted">Country of New Site</option>');
-    for(let i=0;i<sites.length;i++){
+    for(var i=0;i<sites.length;i++){
         $('#site').append( '<option value="'+sites[i].SiteID+'">' +sites[i].SiteName+' | <span class="text-muted">'
             +sites[i].SiteCountry+'</span></option>' );
     }
-    for(let i=0;i<countries.length;i++){
+    for(var i=0;i<countries.length;i++){
         $('#country').append( '<option id="'+countries[i].CountryID+'" value="'+countries[i].CountryName+'">'
             +countries[i].CountryName+ '</option>' );
     }
 }
 /*__________________________________________Testing Next Button_______________________________________________________*/
-                                                                                                                        /** Enhancement #1: Display results per page (10-20/page) instead of date range based*/
+                                                                                                                        /** Enhancement: Display results per page (10-20/page) instead of date range based*/
 function nextDateButton(){
-    let dateEarliest=sessionStorage.getItem('earliestDate');
-    let dateEarly=new Date(dateEarliest);
-    let dateFrom=new Date(dateEarly.getTime() - (30*86400000));
+    var dateEarly=new Date(earliestDate);
+    var dateFrom=new Date(dateEarly.getTime() - (30*86400000));
     $('#next').append(JSON.stringify({dateEarly, dateFrom}));
 }
 QUnit.test("Next Button Test", function (assert) {
@@ -220,18 +219,17 @@ QUnit.test("Next Button Test", function (assert) {
         nextDateButton();
        assert.equal(document.getElementById('next').innerHTML, next_range,"The result should be " + next_range);
     }
-    let next_date_range = "{\"dateEarly\":\"2008-02-03T03:56:36.000Z\",\"dateFrom\":\"2008-01-04T03:56:36.000Z\"}";
-    if(sessionStorage.getItem('earliestDate')){
+    var next_date_range = "{\"dateEarly\":\"2008-02-03T03:56:36.000Z\",\"dateFrom\":\"2008-01-04T03:56:36.000Z\"}";
+    if(earliestDate){
         test_next(next_date_range);
         $('#next').empty();
     }
     else {
-        sessionStorage.setItem('earliestDate',now.toISOString());
+        earliestDate = now.toISOString();
         test_next(next_date_range);
         $('#next').empty();
     }
-    sessionStorage.removeItem('earliestDate');
-    sessionStorage.setItem('earliestDate', 'foo');
+    earliestDate =  'foo';
     next_date_range =  "{\"dateEarly\":null,\"dateFrom\":null}";
     test_next(next_date_range);
     $('#next').empty();
@@ -242,16 +240,15 @@ QUnit.test("Next Button Test", function (assert) {
                                                                                                                         /** Issue: Unhandled less than 4 entries of datesTable size*/
 function previousDateButton(){
 
-    let arr=sessionStorage.getItem('datesTable');
-    let jsonArr=JSON.parse(arr);
+    var jsonArr=JSON.parse(datesTable);
     jsonArr.pop();
     jsonArr.pop();
-    let to=new Date(jsonArr[jsonArr.length-1]);
-    let start=new Date(jsonArr[jsonArr.length-2]);
+    var to=new Date(jsonArr[jsonArr.length-1]);
+    var start=new Date(jsonArr[jsonArr.length-2]);
     jsonArr.pop();
     jsonArr.pop();
     jsonArr=JSON.stringify(jsonArr);
-    sessionStorage.setItem('datesTable',jsonArr);
+    datesTable = jsonArr;
     return {to,start};
 }
 QUnit.test("Previous Button Test", function(assert){
@@ -259,8 +256,8 @@ QUnit.test("Previous Button Test", function(assert){
         assert.equal(JSON.stringify(previousDateButton()),JSON.stringify(previous_range), "The result should be "
             + JSON.stringify(previous_range));
     }
-    sessionStorage.setItem('previousLatestDate',now.toISOString());
-    let prev_date_range ={
+    var previousLatestDate = now.toISOString();
+    var prev_date_range ={
         "to": new Date(2009,6,5,8,7,2),
         "start": new Date(2008,5,3,8,56,39)
 
@@ -271,8 +268,8 @@ QUnit.test("Previous Button Test", function(assert){
 /*__________________________________________Testing First Button______________________________________________________*/
                                                                                                                         /** Issue: Unhandled no tickets with date range */
 function firstDateButton() {
-    let to = new Date();
-    let start = new Date(to.getTime() - (150 * 86400000));
+    var to = new Date();
+    var start = new Date(to.getTime() - (150 * 86400000));
     return { to: to, start: start};
 }
 QUnit.test("First Button Test", function(assert){
@@ -280,8 +277,8 @@ QUnit.test("First Button Test", function(assert){
         assert.equal(JSON.stringify(firstDateButton()),JSON.stringify(previous_range), "The result should be "
             + JSON.stringify(previous_range));
     }
-    sessionStorage.setItem('previousLatestDate',now.toISOString());
-    let date_range =
+    var previousLatestDate = now.toISOString();
+    var date_range =
         {
             to: new Date(),
             start: new Date(new Date().getTime() - (150 * 86400000))
@@ -294,13 +291,13 @@ QUnit.test("First Button Test", function(assert){
                                                                                                                         /** Error Handling: Uncaught TypeError after getElementByID in removing nodeRelatives for null (no element found)*/
 function insightsClient(data){
 
-    let catDiv=document.getElementById('catDiv');
+    var catDiv=document.getElementById('catDiv');
     catDiv.className="col-sm-6 col-lg-6";
 
     $('#issues').empty();
 
-    for (let i = 0; i < data.length; i++) {
-        let percIssues = (data[i].CategoryCount / data[i].TotalCategories) * 100;
+    for (var i = 0; i < data.length; i++) {
+        var percIssues = (data[i].CategoryCount / data[i].TotalCategories) * 100;
 
         if(data[i].Category==="Undefined"){
             data[i].Category="Other";
@@ -308,7 +305,7 @@ function insightsClient(data){
         if(typeof data[i].CategoryCount==="object"){
             data[i].CategoryCount=0;
         }
-        let issues = '  <li>'
+        var issues = '  <li>'
             +
             ' <span class="title">' + data[i].Category + '</span>' +
             ' <span class="value">' + data[i].CategoryCount + ' ' +
@@ -334,7 +331,7 @@ QUnit.test("Insights Test", function(assert){
         insightsClient(data);
         assert.notEqual(document.getElementById('issues').innerHTML,expected_data,"The results should be null");
     }
-    let data=[
+    var data=[
         {
             "Owner": "Julien Rahal",
             "CaseCount": "63",
@@ -397,29 +394,28 @@ QUnit.test("Insights Test", function(assert){
 
 /*__________________________________________Testing Create Ticket Button______________________________________________*/
                                                                                                                         /** Labels Mismatch in form*/
-                                                                                                                        /** Enhancement: Add document ready at start of main.js file */
 $(document).ready(function(){
     $("#createTicket").click(function(){
-        let title=document.getElementById("title");
+        var title=document.getElementById("title");
         title.innerHTML="";
-        let dscription=document.getElementById("description").value;
+        var dscription=document.getElementById("description").value;
         dscription.innerHTML="";
-        let product=document.getElementById("product").value;
+        var product=document.getElementById("product").value;
         product.innerHTML="";
-        let serialNum=document.getElementById("serial").value;
+        var serialNum=document.getElementById("serial").value;
         serialNum.innerHTML="";
-        let sites=sessionStorage.getItem('allSites');
+        var sites=allSites;
         sites=JSON.parse(sites);
         //console.log(sites);
         $('#site').empty();
         /** Error Handling: Uncaught null sites error*/
-        for(let i=0;i<sites.length;i++){
+        for(var i=0;i<sites.length;i++){
             $('#site').append( '<option value="'+sites[i].SiteID+'">' +sites[i].SiteName+' | <span class="text-muted">'
                 +sites[i].SiteCountry+'</span></option>' );
         }
-        let technology=document.getElementById("technology").value;
+        var technology=document.getElementById("technology").value;
         technology.innerHTML="";
-        let severity=document.getElementById("severity").value;
+        var severity=document.getElementById("severity").value;
         severity.innerHTML="";
         $(".file-upload").removeClass('active');
         $("#noFile").text("No file chosen...");
@@ -427,13 +423,13 @@ $(document).ready(function(){
         $("#myModal").show();
         });
     $('#buttonSubmit').click(function() {
-        let title=document.getElementById("title").value;
-        let dscription=document.getElementById("description").value;
-        let product=document.getElementById("product").value;
-        let serialNum=document.getElementById("serial").value;
-        let site=document.getElementById("site").value;
-        let technology=document.getElementById("technology").value;
-        let severity=document.getElementById("severity").value;
+        var title=document.getElementById("title").value;
+        var dscription=document.getElementById("description").value;
+        var product=document.getElementById("product").value;
+        var serialNum=document.getElementById("serial").value;
+        var site=document.getElementById("site").value;
+        var technology=document.getElementById("technology").value;
+        var severity=document.getElementById("severity").value;
         if((title==="")||(dscription==="")||(site==="")||(technology==="")||(severity==="")){
             alert("Please Fill all Fields");
             return;
@@ -462,19 +458,19 @@ $(document).ready(function(){
             }));
         }
         else{
-            let country=document.getElementById("country");
-            let countryName=country.value;
+            var country=document.getElementById("country");
+            var countryName=country.value;
             if(countryName===""){
                 alert("Please Choose Country of new Site");
                 return;
             }
-            let countryCode=0;
-            for(let i=0;i<country.options.length;i++){
+            var countryCode=0;
+            for(var i=0;i<country.options.length;i++){
                 if(country.options[i].value===countryName){
                     countryCode=country.options[i].id;
                 }
             }
-            let siteName=$('#text-to-add').val();
+            var siteName=$('#text-to-add').val();
             $("#myModal").modal('toggle');
             $(".file-upload").removeClass('active');
             $("#noFile").text("No file chosen...");
@@ -514,7 +510,7 @@ QUnit.test("New Ticket Test", function(assert){
             + expected_data);
 
     }
-    let expected_data= "{\"title\":\"test\",\"description\":\"test\",\"product\":\"test\",\"serial\":\"test\"," +
+    var expected_data= "{\"title\":\"test\",\"description\":\"test\",\"product\":\"test\",\"serial\":\"test\"," +
                         "\"site\":\"549\",\"technology\":\"33\",\"severity\":\"1\"}";
 
     test_buttonSubmit(expected_data);
@@ -523,49 +519,48 @@ QUnit.test("New Ticket Test", function(assert){
 });
 
 /*__________________________________________Testing Latest Tickets Row________________________________________________*/
-                                                                                                                        /** td.width deprecated, td.style.width*/
                                                                                                                         /** Enhancement: Sort by date to improve pagination and easier navigation (can display results by pages)*/
 function latestTickets(data) {
     if(data.length!==0){
         /**Error handling: Case when data length = 1*/
-        sessionStorage.setItem("earliestDate",data[data.length-1].Date);
-        let arr=sessionStorage.getItem('datesTable');
+        earliestDate = data[data.length-1].Date;
+        var arr=datesTable;
         if(arr===""){
-            let dates=[data[data.length-1].Date,data[0].Date];
-            sessionStorage.setItem("datesTable",JSON.stringify(dates));
+            var dates=[data[data.length-1].Date,data[0].Date];
+            datesTable = JSON.stringify(dates);
         }
         else{
-            let arrJSON=JSON.parse(arr);
+            var arrJSON=JSON.parse(arr);
             arrJSON.push(data[data.length-1].Date,data[0].Date);
-            sessionStorage.setItem("datesTable",JSON.stringify(arrJSON));
+            datesTable = JSON.stringify(arrJSON);
         }
     }
-    let table = document.getElementById("ticketsTable");
+    var table = document.getElementById("ticketsTable");
     $(".latestTicketsRows").remove();
-    for (let i = 0; i < data.length; i++) {
-        let stat = "success";
+    for (var i = 0; i < data.length; i++) {
+        var stat = "success";
         if (data[i].Status === "Active") {
             stat = "warning";
         }
         else if(data[i].Status==="Soft-Closed"){
             stat = "info";
         }
-        let row = document.createElement("tr");
+        var row = document.createElement("tr");
         row.className="latestTicketsRows";
 
-        let c1 = document.createElement("td");
-        let c11 = document.createElement("span");
-        let c2 = document.createElement("td");
-        let c3 = document.createElement("td");
-        let c4 = document.createElement("td");
-        let divTd=document.createElement("div");
+        var c1 = document.createElement("td");
+        var c11 = document.createElement("span");
+        var c2 = document.createElement("td");
+        var c3 = document.createElement("td");
+        var c4 = document.createElement("td");
+        var divTd=document.createElement("div");
         divTd.style.height="40px";
         divTd.style.overflow="scroll";
         c1.className = "test1";
         c2.className="test";
         c4.appendChild(divTd);
-        let c5 = document.createElement("td");
-        let c6 = document.createElement("td");
+        var c5 = document.createElement("td");
+        var c6 = document.createElement("td");
         c11.className = "badge badge-" + stat;
         c11.innerHTML = data[i].Status;
         if(data[i].Status==="Canceled"){
@@ -598,17 +593,17 @@ QUnit.test("Latest Ticket Test", function(assert){
     function test_latestTickets(data,expected_data, type) {
         latestTickets(data);
         if(type === 'date'){
-        let test = $('.test').first()[0].innerHTML;
+        var test = $('.test').first()[0].innerHTML;
         assert.equal(test, expected_data, "The result should be " + expected_data);
         }
         else
         {
-            let test = $('.test1').first()[0].innerHTML.substring(25, 32);
+            var test = $('.test1').first()[0].innerHTML.substring(25, 32);
             assert.equal(test, expected_data, "The badge should be " + expected_data);
         }
     }
     // Unsorted Data Outcome
-    let data = [
+    var data = [
         {
             Date: new Date(2018,5,19,6,30,20).toLocaleString(),
             Customer: "May 19",
@@ -643,7 +638,7 @@ QUnit.test("Latest Ticket Test", function(assert){
         },
 
     ];
-    let expected_data=data[0].Date;
+    var expected_data=data[0].Date;
     test_latestTickets(data,expected_data, 'date');
     //Wrong Date Format in data outcome
     data=[
@@ -741,11 +736,11 @@ function updateCases(data) {
 QUnit.test("Update Cases Test", function(assert){
     function test_updateCases(data,expected_data) {
         updateCases(data);
-        let test = $('#activeCasesNumber').html();
+        var test = $('#activeCasesNumber').html();
         assert.equal(test, expected_data, "The result should be " + expected_data);
     }
-    let data = {Opened: 56, Unassigned: 45, Closed: 3, Active: 5};
-    let expected_data=5;
+    var data = {Opened: 56, Unassigned: 45, Closed: 3, Active: 5};
+    var expected_data=5;
     test_updateCases(data,expected_data);
     data = {Opened:'foo', Unassigned: -2, Closed: '', Active:null};
     expected_data = "";
@@ -755,18 +750,18 @@ QUnit.test("Update Cases Test", function(assert){
 /*__________________________________________Testing Update Cases______________________________________________________*/
                                                                                                                         /** Error Handling: Negative Values */
 function dailyCases(data,coords) {
-    let totalCases;
-    let totalOpened = 0;
-    let totalClosed = 0;
-    let totalCanceled = 0;
-    let totalUnassigned = 0;
-    let totalActive = 0;
+    var totalCases;
+    var totalOpened = 0;
+    var totalClosed = 0;
+    var totalCanceled = 0;
+    var totalUnassigned = 0;
+    var totalActive = 0;
 
-    let openedDaily = [];
-    let closedDaily = [];
-    let canceledDaily = [];
-    let unassignedDaily = [];
-    let activeDaily = [];
+    var openedDaily = [];
+    var closedDaily = [];
+    var canceledDaily = [];
+    var unassignedDaily = [];
+    var activeDaily = [];
 
 
     totalOpened = totalOpened + parseInt(data.Opened);
@@ -797,33 +792,33 @@ function dailyCases(data,coords) {
     $("#unassignedWidth").css("width", (totalUnassigned / totalCases * 100));
 
     $("#activeWidth").css("width", (totalActive / totalCases * 100));
-    let daysSorted = [];
+    var daysSorted = [];
     if(coords===null){
-        let days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+        var days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
-        let goBackDays = 7;
-        let today = new Date();
+        var goBackDays = 7;
+        var today = new Date();
 
-        for (let i = 0; i < goBackDays; i++) {
-            let newDate = new Date(today.setDate(today.getDate() - 1));
+        for (var i = 0; i < goBackDays; i++) {
+            var newDate = new Date(today.setDate(today.getDate() - 1));
             daysSorted.push(days[newDate.getDay()]);
         }
     }else if(coords.length===1){
-        let temp=coords[0];
+        var temp=coords[0];
         coords[0]='previous';
         coords[1]=temp;
         coords[2]='next';
         daysSorted=coords.reverse();
     }
     else{
-        let daysSorted=coords.reverse();
+        var daysSorted=coords.reverse();
     }
 
     if(openedDaily.length===1){
-        let tempOpen=openedDaily[0];
-        let tempClosed=closedDaily[0];
-        let tempCanceled=canceledDaily[0];
-        let tempActive=activeDaily[0];
+        var tempOpen=openedDaily[0];
+        var tempClosed=closedDaily[0];
+        var tempCanceled=canceledDaily[0];
+        var tempActive=activeDaily[0];
 
         openedDaily[0]=0;
         closedDaily[0]=0;
@@ -879,7 +874,7 @@ function dailyCases(data,coords) {
         ]
     };
 
-    let options = {
+    var options = {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
@@ -925,8 +920,8 @@ function dailyCases(data,coords) {
 
     $('#chartTrendDiv').append('<canvas id="main-chart"></canvas>');
 
-    let ctx = document.getElementById('main-chart').getContext('2d');
-    let mainChart = new Chart(ctx, {
+    var ctx = document.getElementById('main-chart').getContext('2d');
+    var mainChart = new Chart(ctx, {
         type: 'line',
         data: data,
         options: options
@@ -935,29 +930,29 @@ function dailyCases(data,coords) {
 }
 QUnit.test("Daily Cases Test", function(assert){
     function test_dailyCases(data,expected_data) {
-        let coords = null;
+        var coords = null;
         dailyCases(data,coords);
-        let test = $('#openedTickets').html();
+        var test = $('#openedTickets').html();
         assert.equal(test,expected_data, "The result should be " + expected_data);
     }
-    let data = {Opened: -56, Unassigned: 45, Closed: 3, Active: 5, Canceled: 3};
-    let expected_data="(-56 Tickets)";
+    var data = {Opened: -56, Unassigned: 45, Closed: 3, Active: 5, Canceled: 3};
+    var expected_data="(-56 Tickets)";
     test_dailyCases(data,expected_data);
 });
 
 /*__________________________________________Testing Vul Table_________________________________________________________*/
                                                                                                                         /** Error Handling: No restriction on type of of values*/
 function vulTable(jsonevt) {
-    let length = jsonevt.length;
-    let maxCount=jsonevt[0].count;
-    for(let i=0;i<length;i++){
+    var length = jsonevt.length;
+    var maxCount=jsonevt[0].count;
+    for(var i=0;i<length;i++){
         if(jsonevt[i].count>maxCount){
             maxCount=jsonevt[i].count;
         }
     }
     $(".rowVul").remove();
-    for (let i = 0; i < length; i++) {
-        let rowInfo = {
+    for (var i = 0; i < length; i++) {
+        var rowInfo = {
             "tName": "",
             "attacker": "",
             "shn": "",
@@ -975,20 +970,20 @@ function vulTable(jsonevt) {
         rowInfo.severity = jsonevt[i].severity_of_threatid;
         rowInfo.count = jsonevt[i].count;
 
-        let table = document.getElementById("vulTable");
+        var table = document.getElementById("vulTable");
 
-        let row = document.createElement("tr");
+        var row = document.createElement("tr");
 
         row.className = "rowVul";
         row.data = rowInfo;
 
-        let c1 = document.createElement("td");
-        let c2 = document.createElement("td");
-        let c3 = document.createElement("td");
-        let c4 = document.createElement("td");
-        let c5 = document.createElement("td");
-        let c6 = document.createElement("td");
-        let c7 = document.createElement("td");
+        var c1 = document.createElement("td");
+        var c2 = document.createElement("td");
+        var c3 = document.createElement("td");
+        var c4 = document.createElement("td");
+        var c5 = document.createElement("td");
+        var c6 = document.createElement("td");
+        var c7 = document.createElement("td");
 
         if (rowInfo.severity === "critical") {
             c7.style.color = "red";
@@ -1019,7 +1014,7 @@ function vulTable(jsonevt) {
         c6.style.fontSize = "0.85em";
         c7.style.fontSize = "0.85em";
 
-        let percCount = (rowInfo.count / maxCount).toFixed(1) * 100;
+        var percCount = (rowInfo.count / maxCount).toFixed(1) * 100;
         c1.innerHTML = rowInfo.tName;
         c2.innerHTML = rowInfo.shn;
         c3.innerHTML = rowInfo.attacker;
@@ -1043,10 +1038,10 @@ function vulTable(jsonevt) {
 QUnit.test("Vul Table Test", function(assert){
     function test_vulTable(data,expected_data) {
         vulTable(data);
-        let test = $('.rowVul:first .progress-bar').first().width() / $('.rowVul:first .progress-bar').parent().width() * 100;
+        var test = $('.rowVul:first .progress-bar').first().width() / $('.rowVul:first .progress-bar').parent().width() * 100;
         assert.equal(test,expected_data, "The result should be " + expected_data);
     }
-    let data = [
+    var data = [
         {
         threatid:"test",
         src:"test",
@@ -1066,7 +1061,7 @@ QUnit.test("Vul Table Test", function(assert){
             count:"-3"  /** Unhandled */
         }
     ];
-    let expected_data="100";
+    var expected_data="100";
     test_vulTable(data,expected_data);
 
     $(document).ready(function (){
@@ -1077,37 +1072,37 @@ QUnit.test("Vul Table Test", function(assert){
 /*__________________________________________Testing Src Table_________________________________________________________*/
                                                                                                                         /** Error Handling: Displaying incorrect data NaN instead of not showing row*/
 function tableScrollSrcs() {
-    let maxRows = 11;
-    let table = document.getElementById("sourcesTable");
-    let wrapper = table.parentNode;
-    let rowsInTable = table.rows.length;
-    let height = 0;
+    var maxRows = 11;
+    var table = document.getElementById("sourcesTable");
+    var wrapper = table.parentNode;
+    var rowsInTable = table.rows.length;
+    var height = 0;
 
     if (rowsInTable > maxRows) {
-        for (let i = 0; i < maxRows; i++) {
+        for (var i = 0; i < maxRows; i++) {
             height += table.rows[i].clientHeight;
         }
         wrapper.style.height = height + "px";
     }
 }
 function srcsTable(jsonevt, maxBytes,maxSessions) {
-    let length = jsonevt.length;
+    var length = jsonevt.length;
 
     $(".rowClassSrcs").remove();
-    //let placeRowInTable=1;
-    for (let i = 0; i < length; i++) {
-        let rowInfo = {
+    //var placeRowInTable=1;
+    for (var i = 0; i < length; i++) {
+        var rowInfo = {
             "src": "",
             "resolvedSrc": "",
             "sessions": "",
             "bytes": ""
         };
-        let intMaxBytes = maxBytes;
+        var intMaxBytes = maxBytes;
         rowInfo.src = jsonevt[i].src;
         rowInfo.resolvedSrc = jsonevt[i].resolved_src;
         rowInfo.sessions = jsonevt[i].sessions;
         rowInfo.bytes = jsonevt[i].bytes;
-        let intBytes = rowInfo.bytes;
+        var intBytes = rowInfo.bytes;
         if (rowInfo.bytes >= 1000000000) {
             rowInfo.bytes = rowInfo.bytes / 1000000000;
             rowInfo.bytes = "" + rowInfo.bytes.toFixed(1) + "G";
@@ -1126,17 +1121,17 @@ function srcsTable(jsonevt, maxBytes,maxSessions) {
             maxBytes = maxBytes / 100000000;
             maxBytes = "" + maxBytes + "M";
         }
-        let percBytes = (intBytes / intMaxBytes).toFixed(2) * 100;
-        let table = document.getElementById("sourcesTable");
+        var percBytes = (intBytes / intMaxBytes).toFixed(2) * 100;
+        var table = document.getElementById("sourcesTable");
 
-        let row = document.createElement("tr");
+        var row = document.createElement("tr");
         row.className = "rowClassSrcs";
         row.data = rowInfo;
 
-        let c1 = document.createElement("td");
-        let c2 = document.createElement("td");
-        let c3 = document.createElement("td");
-        let c4 = document.createElement("td");
+        var c1 = document.createElement("td");
+        var c2 = document.createElement("td");
+        var c3 = document.createElement("td");
+        var c4 = document.createElement("td");
 
         c1.style.width = "15%";
         c2.style.width = "15%";
@@ -1148,8 +1143,8 @@ function srcsTable(jsonevt, maxBytes,maxSessions) {
         c3.style.fontSize = "0.85em";
         c4.style.fontSize = "0.85em";
 
-        let intSessions = parseInt(rowInfo.sessions);
-        let percSessions = (intSessions / parseInt(maxSessions)).toFixed(2) * 100;
+        var intSessions = parseInt(rowInfo.sessions);
+        var percSessions = (intSessions / parseInt(maxSessions)).toFixed(2) * 100;
 
         c1.innerHTML = rowInfo.resolvedSrc;
         c2.innerHTML = rowInfo.src;
@@ -1175,12 +1170,12 @@ function srcsTable(jsonevt, maxBytes,maxSessions) {
 QUnit.test("Src Table Test", function(assert){
     function test_srcTable(data,expected_data) {
         srcsTable(data,256500000,250);
-        let test = $('.spec:first').width() / $('.spec:first').parent().width() * 100;
+        var test = $('.spec:first').width() / $('.spec:first').parent().width() * 100;
         console.log(test);
         assert.equal(test,expected_data, "The result should be " + expected_data);
     }
 
-    let data = [
+    var data = [
         {
             src: '127.0.1.1',
             resolved_src: '127.0.1.1',
@@ -1194,7 +1189,7 @@ QUnit.test("Src Table Test", function(assert){
             bytes: 100000000
         }
     ];
-    let expected_data="\t\n" +
+    var expected_data="\t\n" +
         "47.994144144144144";
     test_srcTable(data,expected_data);
     $('#sources').hide()
@@ -1204,14 +1199,14 @@ QUnit.test("Src Table Test", function(assert){
                                                                                                                         /** Error Handling: Unclean data*/
                                                                                                                         /** Variable Declaration: Undefined since definition in if-else states*/
 function delayGraph(data,val) {
-    let value = val;
-    let dateNow=new Date();
-    let hourNow=dateNow.getHours();
-    let minuteNow=dateNow.getMinutes();
-    let xaxis=[];
-    let xCoord=hourNow+":"+minuteNow;
+    var value = val;
+    var dateNow=new Date();
+    var hourNow=dateNow.getHours();
+    var minuteNow=dateNow.getMinutes();
+    var xaxis=[];
+    var xCoord=hourNow+":"+minuteNow;
     xaxis.push(xCoord);
-    for(let i=0;i<30;i++){
+    for(var i=0;i<30;i++){
         minuteNow=minuteNow-2;
         if(minuteNow<0){
             hourNow=hourNow-1;
@@ -1220,23 +1215,23 @@ function delayGraph(data,val) {
         xCoord=hourNow+":"+minuteNow;
         xaxis.push(xCoord);
     }
-    let xSorted=[];
+    var xSorted=[];
     if (value === 24.0) {
-        let days = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
-        let timeNow = new Date();
-        let hrNow = timeNow.getHours();
-        let hrsFirstPart = days.slice(hrNow, days.length);
-        let hrsSecondPart = days.slice(0, hrNow + 1);
+        var days = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
+        var timeNow = new Date();
+        var hrNow = timeNow.getHours();
+        var hrsFirstPart = days.slice(hrNow, days.length);
+        var hrsSecondPart = days.slice(0, hrNow + 1);
         xSorted = hrsFirstPart.concat(hrsSecondPart);
         xSorted.reverse();
     } else if (value === 1.0) {
-        let dateNow=new Date();
-        let hourNow=dateNow.getHours();
-        let minuteNow=dateNow.getMinutes();
+        var dateNow=new Date();
+        var hourNow=dateNow.getHours();
+        var minuteNow=dateNow.getMinutes();
         xSorted=[];
-        let xCoord=hourNow+":"+minuteNow;
+        var xCoord=hourNow+":"+minuteNow;
         xSorted.push(xCoord);
-        for(let i=0;i<28;i++){
+        for(var i=0;i<28;i++){
             minuteNow=minuteNow-2;
             if(minuteNow<0){
                 hourNow=hourNow-1;
@@ -1251,18 +1246,18 @@ function delayGraph(data,val) {
 
 
     } else if (value === 144.0) {
-        let timeNow = new Date();
-        let hrNow = timeNow.getHours();
-        let dateNow = timeNow.getDate();
+        var timeNow = new Date();
+        var hrNow = timeNow.getHours();
+        var dateNow = timeNow.getDate();
         xSorted = [];
-        for (let i = 0; i < 30; i++) {
+        for (var i = 0; i < 30; i++) {
             timeNow = new Date();
-            let newDate = new Date(timeNow.setHours(timeNow.getHours() - (i * 6)));
-            let month = monthNames[newDate.getMonth()];
-            let day = newDate.getDate();
-            let hour = newDate.getHours();
-            let minutes = newDate.getMinutes();
-            let strTime = hour+ ":" + minutes;
+            var newDate = new Date(timeNow.setHours(timeNow.getHours() - (i * 6)));
+            var month = monthNames[newDate.getMonth()];
+            var day = newDate.getDate();
+            var hour = newDate.getHours();
+            var minutes = newDate.getMinutes();
+            var strTime = hour+ ":" + minutes;
             if((hour<6)||(i===29)){
                 strTime = day + "/" + month;
             }else if((hour>6)&&(hour<12)){
@@ -1283,19 +1278,19 @@ function delayGraph(data,val) {
         }
 
     } else {
-        let timeNow = new Date();
-        let xSorted = [];
-        for (let i = 0; i < 30; i++) {
+        var timeNow = new Date();
+        var xSorted = [];
+        for (var i = 0; i < 30; i++) {
             timeNow = new Date();
-            let newDate = new Date(timeNow.setDate(timeNow.getDate() - (i)));
-            let month = monthNames[newDate.getMonth()];
-            let day = newDate.getDate();
-            let strTime = day + "/" + month;
+            var newDate = new Date(timeNow.setDate(timeNow.getDate() - (i)));
+            var month = monthNames[newDate.getMonth()];
+            var day = newDate.getDate();
+            var strTime = day + "/" + month;
             xSorted.push(strTime);
         }
     }
 
-    let lineChartData = {
+    var lineChartData = {
         labels: xSorted.reverse(),
         datasets: [
             {
@@ -1364,7 +1359,7 @@ function delayGraph(data,val) {
             }
         ]
     };
-    let options = {
+    var options = {
         responsive: true,
         maintainAspectRatio: false,
         legend: {
@@ -1400,8 +1395,8 @@ function delayGraph(data,val) {
             }
         }
     };
-    let ctx = document.getElementById('delayCanvas');
-    let chart = new Chart(ctx, {
+    var ctx = document.getElementById('delayCanvas');
+    var chart = new Chart(ctx, {
         type: 'line',
         data: lineChartData,
         options: options
@@ -1426,13 +1421,13 @@ QUnit.test("Delay Graph Test", function(assert){
     }
 
     function randomArray() {
-        let Random = [];
-        for (let x = 0; x < 30; x++) {
+        var Random = [];
+        for (var x = 0; x < 30; x++) {
             Random.push(getRndInteger(-0.89, 0.89));
         }
         return Random;
     }
-    let data = {
+    var data = {
         Antartica:  randomArray(),
         Australia:  randomArray(),
         Brazil:     randomArray(),
@@ -1442,7 +1437,7 @@ QUnit.test("Delay Graph Test", function(assert){
         USA:        randomArray(),
         UAE:        randomArray()
     };
-    let expected_data=true;
+    var expected_data=true;
     test_delayGraph(data,expected_data);
     $('#delayTable').hide()
 });

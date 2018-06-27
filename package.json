@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "qunit"
+    "test": "node-qunit-phantomjs ./test/qunit.html --verbose"
   },
   "repository": {
     "type": "git",
@@ -20,8 +20,14 @@
   },
   "homepage": "https://gitlab.com/mwa28/DataConsult-Testing#README",
   "devDependencies": {
+    "node-qunit-phantomjs": "^2.0.0",
+    "phantomjs-prebuilt": "^2.1.16",
+    "qunit": "^2.6.1",
+    "selenium-webdriver": "^4.0.0-alpha.1",
+    "webdriverio": "^4.13.1"
+  },
+  "dependencies": {
     "jquery": "^3.3.1",
-    "jsdom": "^11.11.0",
-    "dom-storage": "^2.1.0"
+    "jsdom": "^11.11.0"
   }
 }
