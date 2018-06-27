@@ -4,7 +4,7 @@
   "description": "Web Testing Models for https://msp.dcgroup.com",
   "main": "test/test.js",
   "directories": {
-    "test": "test",
+    "test": "test"
   },
   "scripts": {
     "test": "karma start",
