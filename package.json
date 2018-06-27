@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node-qunit-phantomjs ./test/qunit.html --verbose"
+    "test": "node ./test/run-driver.js"
   },
   "repository": {
     "type": "git",
