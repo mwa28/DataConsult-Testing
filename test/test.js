@@ -3,11 +3,13 @@
 /*var Storage = require('dom-storage');
 var sessionStorage = new Storage(null, { strict: true });*/
 // To define $ func of JQuery
-/*var jsdom = require('jsdom');
+/*
+var jsdom = require('jsdom');
 const { JSDOM } = jsdom;
 const { window } = new JSDOM();
 const { document } = (new JSDOM('')).window;
 global.document = document;
+
 
 var $ = jQuery = require('jquery')(window);*/
 

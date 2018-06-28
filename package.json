@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "karma start",
-    "sel_test" : "node test/run-driver.js"
+    "sel_test": "karma start"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
   "devDependencies": {
     "karma": "^2.0.4",
     "karma-chrome-launcher": "^2.2.0",
+    "karma-jquery": "^0.2.3",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-qunit": "^2.1.0",
     "node-qunit-phantomjs": "^2.0.0",
