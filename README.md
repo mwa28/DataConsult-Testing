@@ -1,12 +1,9 @@
 # Testing Tools Evaluation
-Testing Modules for <a href="https://msp.dcgroup.com">msp.dcgroup.com</a> using different tools.
-<br>
-<h2> Main QUnit Testing</h2>
-The HTML file `qunit.html` can be loaded immediately to a browser or starting <a href=http://localhost:8080/qunit.html>localhost:8080</a> after starting
-the server using `npm test`. in order to view testing results. 
-It executes tests from `test/test.js` using the 
-<a href="qunitjs.com"> qunit </a> framework.
-<br><br>
-These tests will be refactored 
-and reconfigured using different tools on different branches to create 
-a full testing tree.
+Testing Modules for [msp.dcgroup.com](https//msp.dcgroudp.com) using different tools.
+
+## Main QUnit Testing
+The HTML file [qunit.html] can be loaded immediately to a browser or starting [localhost:8080](http://localhost:8080/qunit.html) after starting the server using `npm test`. in order to view testing results. 
+
+It executes tests from [test/test.js] using the [qunit](qunitjs.com) framework.
+
+These tests will be refactored and reconfigured using different tools on different branches to create a full testing tree.
