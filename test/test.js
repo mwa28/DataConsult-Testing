@@ -219,18 +219,18 @@ function nextDateButton(){
 QUnit.test("Next Button Test", function (assert) {
     function test_next(next_range) {
         nextDateButton();
-       assert.equal(document.getElementById('next').innerHTML, next_range,"The result should be " + next_range);
+       assert.equal($('#next').text(), next_range,"The result should be " + next_range);
     }
     var next_date_range = "{\"dateEarly\":\"2008-02-03T03:56:36.000Z\",\"dateFrom\":\"2008-01-04T03:56:36.000Z\"}";
     if(earliestDate){
         test_next(next_date_range);
-        $('#next').empty();
     }
     else {
         earliestDate = now.toISOString();
         test_next(next_date_range);
-        $('#next').empty();
+        
     }
+	$('#next').empty();
     earliestDate =  'foo';
     next_date_range =  "{\"dateEarly\":null,\"dateFrom\":null}";
     test_next(next_date_range);
@@ -1159,7 +1159,7 @@ function srcsTable(jsonevt, maxBytes,maxSessions) {
             + "</div><div class='progress progress-xs col-sm-6' style='height:10px; padding-left: 5px !important;'>" +
             "<div class='progress-bar bg-info' role='progressbar' style='width: " + percBytes +
             "%' aria-valuenow='50' aria-valuemin='0' aria-valuemax='" + intMaxBytes + "'></div></div></div>";
-        console.log('percbytes: ' + percBytes);
+        //console.log('percbytes: ' + percBytes);
         row.appendChild(c1);
         row.appendChild(c2);
         row.appendChild(c3);

@@ -1,4 +1,3 @@
-# Testing using QUnit
-To view the testing results, it is enough to run the `./qunit.html` file.
+# QUnit Web Based Testing
+The `test.js` file is executed within `../qunit.html` 
 
-Using node, it can be run through `npm test` as shown in `../package.json` through `karma start`
