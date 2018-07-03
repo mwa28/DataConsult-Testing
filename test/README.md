@@ -1,2 +1,2 @@
-# QUnit Web Based Testing
-The [`test.js`](test.js) file is executed within [`qunit.html`](/qunit.html)
+# QUnit Headless JSDOM Testing
+The [`jsdom.js`](jsdom.js) file is executed using `npm test`

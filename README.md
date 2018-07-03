@@ -1,12 +1,7 @@
 # Testing Tools Evaluation
 Testing Modules for [`msp.dcgroup.com`](https//msp.dcgroudp.com) using different tools.
 
+## JSDOM QUnit Testing
+`npm test` runs `node test/jsdom.js` which contains `npm` definitions of [JQuery](https://jquery.com/) and [JSDOM](https://github.com/jsdom/jsdom). This is used to create a window and document and access it without the need for an actual browser.
 
-## Main QUnit Testing
-The HTML file [`qunit.html`](qunit.html) can be loaded immediately to a browser or starting [`localhost:8080`](http://localhost:8080/qunit.html) after starting the server using `npm test` in order to view testing results. 
-
-It executes tests from [`test.js`](test/test.js) using the [qunit](qunitjs.com) framework.
-
-These tests will be refactored and reconfigured using different tools on different branches to create a full testing tree.
-
-## [GitLab Version](https://gitlab.com/mwa28/DataConsult-Testing)
+It executes tests using the [qunit](qunitjs.com) framework.
