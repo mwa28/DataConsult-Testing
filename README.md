@@ -9,4 +9,4 @@ It executes tests from [`test.js`](test/test.js) using the [qunit](qunitjs.com) 
 
 These tests will be refactored and reconfigured using different tools on different branches to create a full testing tree.
 
-## [`GitLab Version`](https://gitlab.com/mwa28/DataConsult-Testing)
+## [GitLab Version](https://gitlab.com/mwa28/DataConsult-Testing)
