@@ -1,2 +1,2 @@
-# QUnit Headless JSDOM Testing
-The [`jsdom.js`](jsdom.js) file is executed using `npm test`
+# Karma QUnit Testing
+The [`test.js`](jsdom.js) file is executed using `npm test`
