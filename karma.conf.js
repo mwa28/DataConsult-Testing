@@ -11,13 +11,13 @@ module.exports = function(config) {
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['jquery-3.3.1','qunit'],
-    plugins: ['karma-jquery', 'karma-qunit', 'karma-jsdom-launcher', 'chart.js', 'html2canvas'],
+    plugins: ['karma-jquery', 'karma-qunit', 'karma-jsdom-launcher','karma-chrome-launcher', 'chart.js', 'html2canvas'],
 
 
       // list of files / patterns to load in the browser
     files: [
       'app/app.js',
-      'test/jsdom.js'
+      'test/test.js'
     ],
 
 
@@ -57,8 +57,14 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['jsdom'],
-
+    browsers: ['Chrome'],
+    /*jsdomLauncher: {
+          jsdom: {
+              runScripts: "dangerously",
+              pretendToBeVisual: true,
+              resources: "usable"
+          }
+    },*/
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
