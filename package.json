@@ -5,7 +5,7 @@
   "main": "main.js",
   "directories": {
     "test": "test",
-    "static": "static"
+    "app": "app"
   },
   "scripts": {
     "test": "node main.js"
