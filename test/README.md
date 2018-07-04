@@ -1,2 +1,2 @@
 # Karma QUnit Testing
-The [`test.js`](jsdom.js) file is executed using `npm test`
+The [`test.js`](test.js) file is executed using `npm test`
