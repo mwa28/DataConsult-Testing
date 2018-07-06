@@ -11,12 +11,12 @@ module.exports = function(config) {
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['jquery-3.3.1','qunit'],
-    plugins: ['karma-jquery', 'karma-qunit', 'karma-jsdom-launcher','karma-chrome-launcher'],
+    plugins: ['karma-jquery', 'karma-qunit', 'karma-chrome-launcher'],
 
 
       // list of files / patterns to load in the browser
     files: [
-      'app/chart.js',
+      'app/Chart.js',
       'app/app.js',
       'test/test.js'
     ],
