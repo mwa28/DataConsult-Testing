@@ -4,11 +4,8 @@ let Storage = require('dom-storage');
 let sessionStorage = new Storage(null, { strict: true });
 */
 
-/*const QUnit = require('qunit');
-const {window} = (new JSDOM(`<body><div id="qunit"></div><div id="qunit-fixture"></div></body>`, { runScripts: "dangerously" })).window;
-document = window.document;*/
 /** Replace all document by jquery*/
-const chart = require('chart.js');
+
 const QUnit = require('qunit');
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
@@ -18,25 +15,27 @@ let { window } = dom;
 let $ = require("jquery")(window);
 const document = window.document;
 let app = require('../app/app');
-
+let siteIndicator="exst";
+let earliestDate = new Date(2008,1,3,5,56,36).toISOString();
+let chart = require('../app/Chart');
 /** Enhancement: Display results per page (10-20/page) instead of date range based*/
 QUnit.test("Next Button Test", function (assert) {
     $('#qunit-fixture').append('<div id="next"></div>');
     function test_next(next_range) {
-        app.nextDateButton(document,$);
+        app.nextDateButton(earliestDate,$);
         assert.equal(document.getElementById('next').innerHTML, next_range,"The result should be " + next_range);
     }
     let next_date_range = "{\"dateEarly\":\"2008-02-03T03:56:36.000Z\",\"dateFrom\":\"2008-01-04T03:56:36.000Z\"}";
-    if(app.earliestDate){
+    if(earliestDate){
         test_next(next_date_range);
     }
     else {
-        app.earliestDate = app.now.toISOString();
+        earliestDate = new Date(2008,1,3,5,56,36).toISOString();
         test_next(next_date_range);
 
     }
     $('#next').empty();
-    app.earliestDate =  'foo';
+    earliestDate =  'foo';
     next_date_range =  "{\"dateEarly\":null,\"dateFrom\":null}";
     test_next(next_date_range);
     $('#next').empty();
@@ -183,6 +182,152 @@ QUnit.test("New Ticket Test", function(assert){
     $('#qunit-fixture').append('<div id="ticket"></div>');
     $('#qunit-fixture').append('<div id="createTicket"></div>');
     $('#qunit-fixture').append(modal.contextHTML);
+    let allSites = JSON.stringify([
+        {SiteID: "549", SiteName: "Azadea", SiteCountry: "Lebanon", SiteCountryCode: "2"},
+        {SiteID: "617", SiteName: "Credit Libanais", SiteCountry: "Lebanon", SiteCountryCode: "2"},
+        {SiteID: "601", SiteName: "Delta Trading Co.", SiteCountry: "Lebanon", SiteCountryCode: "2"},
+        {SiteID: "618", SiteName: "Hopital Albert Haykel", SiteCountry: "Lebanon", SiteCountryCode: "2"},
+        {SiteID: "539", SiteName: "KSA", SiteCountry: "saudi arabia", SiteCountryCode: "99"},
+        {SiteID: "49", SiteName: "Mkalles", SiteCountry: "Lebanon", SiteCountryCode: "2"},
+        {SiteID: "613", SiteName: "MOF", SiteCountry: "Lebanon", SiteCountryCode: "2"},
+        {SiteID: "593", SiteName: "Ogero HO", SiteCountry: "Lebanon", SiteCountryCode: "2"},
+        {SiteID: "577", SiteName: "Red Cross Hazmieh", SiteCountry: "lebanon", SiteCountryCode: "2"},
+        {SiteID: "564", SiteName: "Red Cross Spears", SiteCountry: "lebanon", SiteCountryCode: "2"},
+        {SiteID: "621", SiteName: "SGBL", SiteCountry: "Lebanon", SiteCountryCode: "2"},
+        {SiteID: "563", SiteName: "Tech Hub", SiteCountry: "Lebanon", SiteCountryCode: "2"},
+        {SiteID: "437", SiteName: "TEST PORTAL", SiteCountry: "Lebanon", SiteCountryCode: "2"},
+        {SiteID: "616", SiteName: "TESTING", SiteCountry: "lebanon", SiteCountryCode: "2"}]);
+    let allCountries = JSON.stringify([
+        {CountryID:3,    CountryName: "Afghanistan"},
+        {CountryID:4,    CountryName: "Albania"},
+        {CountryID:5,    CountryName: "Algeria"},
+        {CountryID:6,    CountryName: "Argentina"},
+        {CountryID:7,    CountryName:"Armenia"},
+        {CountryID:8,    CountryName:"Australia"},
+        {CountryID:9,    CountryName:"Austria"},
+        {CountryID:10,   CountryName:"Azerbaijan"},
+        {CountryID:11,   CountryName:"Bahrain"},
+        {CountryID:12,   CountryName:"Bangladesh"},
+        {CountryID:13,   CountryName:"Belarus"},
+        {CountryID:14,   CountryName:"Belgium"},
+        {CountryID:15,   CountryName:"Belize"},
+        {CountryID:16,   CountryName:"Bolivarian Republic of Venezuela"},
+        {CountryID:17,   CountryName:"Bolivia"},
+        {CountryID:18,   CountryName:"Bosnia and Herzegovina"},
+        {CountryID:19,   CountryName:"Brazil"},
+        {CountryID:20,   CountryName:"Brunei Darussalam"},
+        {CountryID:21,   CountryName:"Bulgaria"},
+        {CountryID:22,   CountryName:"Cambodia"},
+        {CountryID:23,   CountryName:"Canada"},
+        {CountryID:24,   CountryName:"Chile"},
+        {CountryID:25,   CountryName:"Colombia"},
+        {CountryID:127,  CountryName:"Congo"},
+        {CountryID:26,   CountryName:"Costa Rica"},
+        {CountryID:27,   CountryName:"Croatia"},
+        {CountryID:28,   CountryName:"Czech Republic"},
+        {CountryID:29,   CountryName:"Denmark"},
+        {CountryID:30,   CountryName:"Dominican Republic"},
+        {CountryID:31,   CountryName:"Ecuador"},
+        {CountryID:32,   CountryName:"Egypt"},
+        {CountryID:33,   CountryName:"El Salvador"},
+        {CountryID:34,   CountryName:"Estonia"},
+        {CountryID:35,   CountryName:"Ethiopia"},
+        {CountryID:36,   CountryName:"Faroe Islands"},
+        {CountryID:37,   CountryName:"Finland"},
+        {CountryID:38,   CountryName:"France"},
+        {CountryID:39,   CountryName:"Georgia"},
+        {CountryID:40,   CountryName:"Germany"},
+        {CountryID:128,  CountryName:"Ghana"},
+        {CountryID:41,   CountryName:"Greece"},
+        {CountryID:42,   CountryName:"Greenland"},
+        {CountryID:43,   CountryName:"Guatemala"},
+        {CountryID:44,   CountryName:"Honduras"},
+        {CountryID:45,   CountryName:"Hong Kong S.A.R."},
+        {CountryID:46,   CountryName:"Hungary"},
+        {CountryID:47,   CountryName:"Iceland"},
+        {CountryID:48,   CountryName:"India"},
+        {CountryID:49,   CountryName:"Indonesia"},
+        {CountryID:50,   CountryName:"Iran"},
+        {CountryID:51,   CountryName:"Iraq"},
+        {CountryID:52,   CountryName:"Ireland"},
+        {CountryID:53,   CountryName:"Islamic Republic of Pakistan"},
+        {CountryID:54,   CountryName:"Israel"},
+        {CountryID:55,   CountryName:"Italy"},
+        {CountryID:56,   CountryName:"Jamaica"},
+        {CountryID:57,   CountryName:"Japan"},
+        {CountryID:58,   CountryName:"Jordan"},
+        {CountryID:59,   CountryName:"Kazakhstan"},
+        {CountryID:60,   CountryName:"Kenya"},
+        {CountryID:61,   CountryName:"Korea"},
+        {CountryID:62,   CountryName:"Kuwait"},
+        {CountryID:63,   CountryName:"Kyrgyzstan"},
+        {CountryID:64,   CountryName:"Lao P.D.R."},
+        {CountryID:65,   CountryName:"Latvia"},
+        {CountryID:2,    CountryName:"Lebanon"},
+        {CountryID:66,   CountryName:"Libya"},
+        {CountryID:67,   CountryName:"Liechtenstein"},
+        {CountryID:68,   CountryName:"Lithuania"},
+        {CountryID:69,   CountryName:"Luxembourg"},
+        {CountryID:70,   CountryName:"Macao S.A.R."},
+        {CountryID:71,   CountryName:"Macedonia (FYROM)"},
+        {CountryID:72,   CountryName:"Malaysia"},
+        {CountryID:73,   CountryName:"Maldives"},
+        {CountryID:74,   CountryName:"Malta"},
+        {CountryID:75,   CountryName:"Mexico"},
+        {CountryID:76,   CountryName:"Mongolia"},
+        {CountryID:77,   CountryName:"Montenegro"},
+        {CountryID:78,   CountryName:"Morocco"},
+        {CountryID:79,   CountryName:"Nepal"},
+        {CountryID:80,   CountryName:"Netherlands"},
+        {CountryID:81,   CountryName:"New Zealand"},
+        {CountryID:82,   CountryName:"Nicaragua"},
+        {CountryID:83,   CountryName:"Nigeria"},
+        {CountryID:84,   CountryName:"Norway"},
+        {CountryID:85,   CountryName:"Oman"},
+        {CountryID:86,   CountryName:"Panama"},
+        {CountryID:87,   CountryName:"Paraguay"},
+        {CountryID:88,   CountryName:"People's Republic of China"},
+        {CountryID:89,   CountryName:"Peru"},
+        {CountryID:90,   CountryName:"Philippines"},
+        {CountryID:91,   CountryName:"Poland"},
+        {CountryID:92,   CountryName:"Portugal"},
+        {CountryID:93,   CountryName:"Principality of Monaco"},
+        {CountryID:94,   CountryName:"Puerto Rico"},
+        {CountryID:95,   CountryName:"Qatar"},
+        {CountryID:96,   CountryName:"Romania"},
+        {CountryID:97,   CountryName:"Russia"},
+        {CountryID:98,   CountryName:"Rwanda"},
+        {CountryID:99,   CountryName:"Saudi Arabia"},
+        {CountryID:100,  CountryName:"Senegal"},
+        {CountryID:101,  CountryName:"Serbia"},
+        {CountryID:102,  CountryName:"Serbia and Montenegro (Former)"},
+        {CountryID:103,  CountryName:"Singapore"},
+        {CountryID:104,  CountryName:"Slovakia"},
+        {CountryID:105,  CountryName:"Slovenia"},
+        {CountryID:106,  CountryName:"South Africa"},
+        {CountryID:107,  CountryName:"Spain"},
+        {CountryID:108,  CountryName:"Sri Lanka"},
+        {CountryID:109,  CountryName:"Sweden"},
+        {CountryID:110,  CountryName:"Switzerland"},
+        {CountryID:111,  CountryName:"Syria"},
+        {CountryID:112,  CountryName:"Taiwan"},
+        {CountryID:113,  CountryName:"Tajikistan"},
+        {CountryID:114,  CountryName:"Thailand"},
+        {CountryID:115,  CountryName:"Trinidad and Tobago"},
+        {CountryID:116,  CountryName:"Tunisia"},
+        {CountryID:117,  CountryName:"Turkey"},
+        {CountryID:118,  CountryName:"Turkmenistan"},
+        {CountryID:119,  CountryName:"UAE"},
+        {CountryID:120,  CountryName:"Ukraine"},
+        {CountryID:121,  CountryName:"United Kingdom"},
+        {CountryID:1,    CountryName:"United States (US)"},
+        {CountryID:122,  CountryName:"Uruguay"},
+        {CountryID:123,  CountryName:"Uzbekistan"},
+        {CountryID:124,  CountryName:"Vietnam"},
+        {CountryID:125,  CountryName:"Yemen"},
+        {CountryID:126,  CountryName:"Zimbabwe"}
+
+    ]);
     function fillModal(sites,countries){
         $('#site').empty();
         $('#country').empty();
@@ -196,13 +341,13 @@ QUnit.test("New Ticket Test", function(assert){
                 +countries[i].CountryName+ '</option>' );
         }
     }
-    fillModal(JSON.parse(app.allSites), JSON.parse(app.allCountries));
+    fillModal(JSON.parse(allSites), JSON.parse(allCountries));
     $("#createTicket").click(function(){
         $("#title").val('');
         $("#description").val('');
         $("#product").val('');
         $("#serial").val('');
-        let sites=app.allSites;
+        let sites=allSites;
         sites=JSON.parse(sites);
         //console.log(sites);
         $('#site').empty();
@@ -232,7 +377,7 @@ QUnit.test("New Ticket Test", function(assert){
         if(serialNum===""){
             serialNum="n/a";
         }
-        if(app.siteIndicator==="exst"){
+        if(siteIndicator==="exst"){
             $(".file-upload").removeClass('active');
             $("#noFile").text("No file chosen...");
             $("#chooseFile").val("");
@@ -297,12 +442,12 @@ QUnit.test("New Ticket Test", function(assert){
     $('#exstSite').click(function(){
         $('#fillNewSite').hide(500);
         $('#pickExtSite').show(500);
-        app.siteIndicator = "exst";
+        siteIndicator = "exst";
     });
     $('#newSite').click(function(){
         $('#pickExtSite').hide(500);
         $('#fillNewSite').show(500);
-        app.siteIndicator="new";
+        siteIndicator="new";
     });
     function test_buttonSubmit(expected_data){
         $('#createTicket').trigger('click');
@@ -487,7 +632,7 @@ QUnit.test("Vul Table Test", function(assert){
     $('#qunit-fixture').append('<table id="vulTable"><tbody><tr class="rowVul"></tr></tbody></table>');
     function test_vulTable(data,expected_data) {
         app.vulTable(data,document, $);
-        let test = $('.rowVul:first .progress-bar').first().width() / $('.rowVul:first .progress-bar').parent().width() * 100;
+        let test = $('.rowVul:first .progress-bar').css('width');
         assert.equal(test,expected_data, "The result should be " + expected_data);
     }
     let data = [
@@ -510,7 +655,7 @@ QUnit.test("Vul Table Test", function(assert){
             count:"-3"  /** Unhandled */
         }
     ];
-    let expected_data="100";
+    let expected_data="100%";
     test_vulTable(data,expected_data);
 });
 
@@ -519,7 +664,7 @@ QUnit.test("Src Table Test", function(assert){
     $('#qunit-fixture').append('<div id="sources"><table id="sourcesTable"><tbody><tr class="rowClassSrcs"></tr></tbody></table></div>');
     function test_srcTable(data,expected_data) {
         app.srcsTable(data,256500000,250,document, $);
-        let test = $('.spec:first').width() / $('.spec:first').parent().width() * 100;
+        let test = $('.spec:first').css('width')
         //console.log(test);
         assert.equal(test,expected_data, "The result should be " + expected_data);
     }
@@ -538,7 +683,7 @@ QUnit.test("Src Table Test", function(assert){
             bytes: 100000000
         }
     ];
-    let expected_data="47.99301724137931";
+    let expected_data="48%";
     test_srcTable(data,expected_data);
 });
 
@@ -605,4 +750,3 @@ QUnit.test("Daily Cases Test", function(assert){
     test_dailyCases(data,expected_data);
     console.log('done');
 });
-
