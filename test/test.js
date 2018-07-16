@@ -647,7 +647,7 @@ QUnit.test("Vul Table Test", function (assert) {
 
     function test_vulTable(data, expected_data) {
         vulTable(data);
-        let test = $('.rowVul:first .progress-bar').css('width');
+        let test = $('.rowVul:first .progress-bar').first().width() / $('.rowVul:first .progress-bar').parent().width() * 100;
         assert.equal(test, expected_data, "The result should be " + expected_data);
     }
 
@@ -671,7 +671,7 @@ QUnit.test("Vul Table Test", function (assert) {
             count: "-3"  /** Unhandled */
         }
     ];
-    let expected_data = "100%";
+    let expected_data = "100";
     test_vulTable(data, expected_data);
 });
 
@@ -681,7 +681,7 @@ QUnit.test("Src Table Test", function (assert) {
 
     function test_srcTable(data, expected_data) {
         srcsTable(data, 256500000, 250);
-        let test = $('.spec:first').css('width');
+        let test = $('.spec:first').width() / $('.spec:first').parent().width() * 100;
         //console.log(test);
         assert.equal(test, expected_data, "The result should be " + expected_data);
     }
@@ -700,7 +700,7 @@ QUnit.test("Src Table Test", function (assert) {
             bytes: 100000000
         }
     ];
-    let expected_data = "48%";
+    let expected_data = "47.99301724137931";
     test_srcTable(data, expected_data);
 });
 
