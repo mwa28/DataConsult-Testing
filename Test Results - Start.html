@@ -572,8 +572,8 @@ jQuery.cookie = function(name, value, options) {
 <body>
 <div id="container">
 <div id="header">
-<div class="time" xmlns="">352 ms</div>
-<h1>Start: <strong><span class="total" xmlns="http://www.w3.org/1999/xhtml">11 total, </span><span class="failed">3 failed, </span><span class="passed">8 passed</span></strong>
+<div class="time" xmlns="">680 ms</div>
+<h1>Start: <strong><span class="total" xmlns="http://www.w3.org/1999/xhtml">11 total, </span><span class="passed">11 passed</span></strong>
 </h1>
 <div id="treecontrol">
 <ul>
@@ -589,14 +589,14 @@ jQuery.cookie = function(name, value, options) {
 </div>
 <div id="content">
 <ul id="tree">
-<li xmlns="" class="level top failed open">
+<li xmlns="" class="level top open">
 <span><em class="time">
-<div class="time">352 ms</div>
+<div class="time">680 ms</div>
 </em>karma.conf.js</span>
 <ul>
-<li class="level suite failed open">
+<li class="level suite open">
 <span><em class="time">
-<div class="time">352 ms</div>
+<div class="time">680 ms</div>
 </em>Mozilla/5.0 (win32) AppleWebKit/537.36 (KHTML, like Gecko) jsdom/11.11.0</span>
 <ul>
 <li class="level test">
@@ -611,68 +611,48 @@ jQuery.cookie = function(name, value, options) {
 </li>
 <li class="level test">
 <span><em class="time">
-<div class="time">1 ms</div>
+<div class="time">2 ms</div>
 </em><em class="status">passed</em>First Button Test</span>
 </li>
 <li class="level test">
 <span><em class="time">
-<div class="time">17 ms</div>
+<div class="time">20 ms</div>
 </em><em class="status">passed</em>Insights Test</span>
 </li>
 <li class="level test">
 <span><em class="time">
-<div class="time">244 ms</div>
+<div class="time">327 ms</div>
 </em><em class="status">passed</em>New Ticket Test</span>
 </li>
 <li class="level test">
 <span><em class="time">
-<div class="time">35 ms</div>
+<div class="time">146 ms</div>
 </em><em class="status">passed</em>Latest Ticket Test</span>
 </li>
 <li class="level test">
 <span><em class="time">
-<div class="time">6 ms</div>
+<div class="time">7 ms</div>
 </em><em class="status">passed</em>Update Cases Test</span>
-</li>
-<li class="level test failed open">
-<span><em class="time">
-<div class="time">13 ms</div>
-</em><em class="status">failed</em>Vul Table Test</span>
-<ul>
-<li class="text">
-<span class="stderr">	The result should be 100<br/>	Expected: &quot;100&quot;<br/>	Actual: NaN<br/>	    at test_vulTable (test/test.js:651:16)<br/>	    at Object.&lt;anonymous&gt; (test/test.js:675:5)<br/>	    at runTest (node_modules/qunit/qunit/qunit.js:1530:30)<br/>	    at Test.run (node_modules/qunit/qunit/qunit.js:1516:6)<br/>	    at node_modules/qunit/qunit/qunit.js:1737:12<br/>	    at advanceTaskQueue (node_modules/qunit/qunit/qunit.js:1129:6)<br/>	<br/></span>
-</li>
-</ul>
-</li>
-<li class="level test failed open">
-<span><em class="time">
-<div class="time">12 ms</div>
-</em><em class="status">failed</em>Src Table Test</span>
-<ul>
-<li class="text">
-<span class="stderr">	The result should be 47.99301724137931<br/>	Expected: &quot;47.99301724137931&quot;<br/>	Actual: NaN<br/>	    at test_srcTable (test/test.js:686:16)<br/>	    at Object.&lt;anonymous&gt; (test/test.js:704:5)<br/>	    at runTest (node_modules/qunit/qunit/qunit.js:1530:30)<br/>	    at Test.run (node_modules/qunit/qunit/qunit.js:1516:6)<br/>	    at node_modules/qunit/qunit/qunit.js:1737:12<br/>	    at advanceTaskQueue (node_modules/qunit/qunit/qunit.js:1129:6)<br/>	<br/></span>
-</li>
-</ul>
 </li>
 <li class="level test">
 <span><em class="time">
-<div class="time">6 ms</div>
-</em><em class="status">passed</em>Delay Graph Test</span>
-<ul>
-<li class="text">
-<span class="stdout">&#39;Failed to create chart: can&#39;t acquire context from the given item&#39;<br/></span>
+<div class="time">17 ms</div>
+</em><em class="status">passed</em>Vul Table Test</span>
 </li>
-</ul>
-</li>
-<li class="level test failed open">
+<li class="level test">
 <span><em class="time">
-<div class="time">10 ms</div>
-</em><em class="status">failed</em>Daily Cases Test</span>
-<ul>
-<li class="text">
-<span class="stderr">	Died on test #1     at test/test.js:744:7<br/>	    at Script.runInContext (vm.js:102:20)<br/>	    at Object.runInContext (vm.js:280:6)<br/>	    at processJavaScript (C:\Users\mOh\Documents\GitExtensions\DataConsult-Testing\node_modules\jsdom\lib\jsdom\living\nodes\HTMLScriptElement-impl.js:190:10)<br/>	    at HTMLScriptElementImpl._innerEval (C:\Users\mOh\Documents\GitExtensions\DataConsult-Testing\node_modules\jsdom\lib\jsdom\living\nodes\HTMLScriptElement-impl.js:122:5)<br/>	    at C:\Users\mOh\Documents\GitExtensions\DataConsult-Testing\node_modules\jsdom\lib\jsdom\browser\resource-loader.js:31:22<br/>	    at Object.check (C:\Users\mOh\Documents\GitExtensions\DataConsult-Testing\node_modules\jsdom\lib\jsdom\living\nodes\Document-impl.js:76:11): Cannot read property &#39;length&#39; of null<br/>	TypeError: Cannot read property &#39;length&#39; of null<br/>	    at Object.acquireContext (app/Chart.js:10847:19)<br/>	    at Chart.construct (app/Chart.js:3895:27)<br/>	    at new Chart (app/Chart.js:6215:8)<br/>	    at dailyCases (app/app.js:309:21)<br/>	    at test_dailyCases (test/test.js:764:9)<br/>	    at Object.&lt;anonymous&gt; (test/test.js:771:5)<br/>	    at runTest (node_modules/qunit/qunit/qunit.js:1530:30)<br/>	    at Test.run (node_modules/qunit/qunit/qunit.js:1516:6)<br/>	    at node_modules/qunit/qunit/qunit.js:1737:12<br/>	    at advanceTaskQueue (node_modules/qunit/qunit/qunit.js:1129:6)<br/>	<br/></span>
+<div class="time">13 ms</div>
+</em><em class="status">passed</em>Src Table Test</span>
 </li>
-</ul>
+<li class="level test">
+<span><em class="time">
+<div class="time">91 ms</div>
+</em><em class="status">passed</em>Delay Graph Test</span>
+</li>
+<li class="level test">
+<span><em class="time">
+<div class="time">49 ms</div>
+</em><em class="status">passed</em>Daily Cases Test</span>
 </li>
 </ul>
 </li>
@@ -682,7 +662,7 @@ jQuery.cookie = function(name, value, options) {
 </div>
 </div>
 <div id="footer">
-<p>Generated by WebStorm on 7/6/18 1:28 PM</p>
+<p>Generated by WebStorm on 7/17/18 9:56 AM</p>
 </div>
 </body>
 </html>
