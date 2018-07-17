@@ -1,111 +1,131 @@
-function nextDateButton(){
-    let dateEarly=new Date(earliestDate);
-    let dateFrom=new Date(dateEarly.getTime() - (30*86400000));
-    $('#next').append(JSON.stringify({dateEarly, dateFrom}));
-}
-function previousDateButton(){
+"use strict";
 
-    let jsonArr=JSON.parse(datesTable);
+var _typeof =
+    typeof Symbol === "function" && typeof Symbol.iterator === "symbol"
+        ? function(obj) {
+            return typeof obj;
+        }
+        : function(obj) {
+            return obj &&
+            typeof Symbol === "function" &&
+            obj.constructor === Symbol &&
+            obj !== Symbol.prototype
+                ? "symbol"
+                : typeof obj;
+        };
+
+function nextDateButton() {
+    var dateEarly = new Date(earliestDate);
+    var dateFrom = new Date(dateEarly.getTime() - 30 * 86400000);
+    $("#next").append(
+        JSON.stringify({ dateEarly: dateEarly, dateFrom: dateFrom })
+    );
+}
+function previousDateButton() {
+    var jsonArr = JSON.parse(datesTable);
     jsonArr.pop();
     jsonArr.pop();
-    let to=new Date(jsonArr[jsonArr.length-1]);
-    let start=new Date(jsonArr[jsonArr.length-2]);
+    var to = new Date(jsonArr[jsonArr.length - 1]);
+    var start = new Date(jsonArr[jsonArr.length - 2]);
     jsonArr.pop();
     jsonArr.pop();
-    jsonArr=JSON.stringify(jsonArr);
+    jsonArr = JSON.stringify(jsonArr);
     datesTable = jsonArr;
-    return {to,start};
+    return { to: to, start: start };
 }
 function firstDateButton() {
-    let to = new Date();
-    let start = new Date(to.getTime() - (150 * 86400000));
-    return { to: to, start: start};
+    var to = new Date();
+    var start = new Date(to.getTime() - 150 * 86400000);
+    return { to: to, start: start };
 }
-function insightsClient(data){
+function insightsClient(data) {
+    var catDiv = document.getElementById("catDiv");
+    catDiv.className = "col-sm-6 col-lg-6";
 
-    let catDiv=document.getElementById('catDiv');
-    catDiv.className="col-sm-6 col-lg-6";
+    $("#issues").empty();
 
-    $('#issues').empty();
+    for (var i = 0; i < data.length; i++) {
+        var percIssues = (data[i].CategoryCount / data[i].TotalCategories) * 100;
 
-    for (let i = 0; i < data.length; i++) {
-        let percIssues = (data[i].CategoryCount / data[i].TotalCategories) * 100;
-
-        if(data[i].Category==="Undefined"){
-            data[i].Category="Other";
+        if (data[i].Category === "Undefined") {
+            data[i].Category = "Other";
         }
-        if(typeof data[i].CategoryCount==="object"){
-            data[i].CategoryCount=0;
+        if (_typeof(data[i].CategoryCount) === "object") {
+            data[i].CategoryCount = 0;
         }
-        let issues = '  <li>'
-            +
-            ' <span class="title">' + data[i].Category + '</span>' +
-            ' <span class="value">' + data[i].CategoryCount + ' ' +
-            '   </span>' +
+        var issues =
+            "  <li>" +
+            ' <span class="title">' +
+            data[i].Category +
+            "</span>" +
+            ' <span class="value">' +
+            data[i].CategoryCount +
+            " " +
+            "   </span>" +
             '<div class="bars">' +
             ' <div class="progress progress-xs">' +
-            '<div class="" role="progressbar" style="background-color:#FFCE56 !important; width: ' + percIssues +
+            '<div class="" role="progressbar" style="background-color:#FFCE56 !important; width: ' +
+            percIssues +
             '%" aria-valuenow="8" ' +
             'aria-valuemin="0" aria-valuemax="100"></div>' +
-            ' </div>' +
-            '  </div>' +
-            '</li>';
+            " </div>" +
+            "  </div>" +
+            "</li>";
 
-        $('#issues').append(issues);
+        $("#issues").append(issues);
     }
 }
 function latestTickets(data) {
-    if(data.length!==0){
+    if (data.length !== 0) {
         /**Error handling: Case when data length = 1*/
-        earliestDate = data[data.length-1].Date;
-        let arr=datesTable;
-        if(arr===""){
-            let dates=[data[data.length-1].Date,data[0].Date];
+        earliestDate = data[data.length - 1].Date;
+        var arr = datesTable;
+        if (arr === "") {
+            var dates = [data[data.length - 1].Date, data[0].Date];
             datesTable = JSON.stringify(dates);
-        }
-        else{
-            let arrJSON=JSON.parse(arr);
-            arrJSON.push(data[data.length-1].Date,data[0].Date);
+        } else {
+            var arrJSON = JSON.parse(arr);
+            arrJSON.push(data[data.length - 1].Date, data[0].Date);
             datesTable = JSON.stringify(arrJSON);
         }
     }
-    let table = document.getElementById("ticketsTable");
+    var table = document.getElementById("ticketsTable");
     $(".latestTicketsRows").remove();
-    for (let i = 0; i < data.length; i++) {
-        let stat = "success";
+    for (var i = 0; i < data.length; i++) {
+        var stat = "success";
         if (data[i].Status === "Active") {
             stat = "warning";
-        }
-        else if(data[i].Status==="Soft-Closed"){
+        } else if (data[i].Status === "Soft-Closed") {
             stat = "info";
         }
-        let row = document.createElement("tr");
-        row.className="latestTicketsRows";
+        var row = document.createElement("tr");
+        row.className = "latestTicketsRows";
 
-        let c1 = document.createElement("td");
-        let c11 = document.createElement("span");
-        let c2 = document.createElement("td");
-        let c3 = document.createElement("td");
-        let c4 = document.createElement("td");
-        let divTd=document.createElement("div");
-        divTd.style.height="40px";
-        divTd.style.overflow="scroll";
+        var c1 = document.createElement("td");
+        var c11 = document.createElement("span");
+        var c2 = document.createElement("td");
+        var c3 = document.createElement("td");
+        var c4 = document.createElement("td");
+        var divTd = document.createElement("div");
+        divTd.style.height = "40px";
+        divTd.style.overflow = "scroll";
         c1.className = "test1";
-        c2.className="test";
+        c2.className = "test";
         c4.appendChild(divTd);
-        let c5 = document.createElement("td");
-        let c6 = document.createElement("td");
+        var c5 = document.createElement("td");
+        var c6 = document.createElement("td");
         c11.className = "badge badge-" + stat;
         c11.innerHTML = data[i].Status;
-        if(data[i].Status==="Canceled"){
+        if (data[i].Status === "Canceled") {
             c11.className = "";
-            c11.innerHTML="<span style='background-color:grey; color:white;'>Canceled</span>"
+            c11.innerHTML =
+                "<span style='background-color:grey; color:white;'>Canceled</span>";
         }
-        c3.style.width="10%";
-        c2.style.width="14%";
-        c5.style.width="11%";
-        c6.style.width="15%";
-        c2.innerHTML =(data[i].Date);
+        c3.style.width = "10%";
+        c2.style.width = "14%";
+        c5.style.width = "11%";
+        c6.style.width = "15%";
+        c2.innerHTML = data[i].Date;
 
         c3.innerHTML = "<b>" + data[i].Customer + "</b>";
         divTd.innerHTML = data[i].Title;
@@ -120,11 +140,9 @@ function latestTickets(data) {
         row.appendChild(c5);
         row.appendChild(c6);
         $(table).append(row);
-
     }
 }
 function updateCases(data) {
-
     $("#activeCasesNumber").html(data.Active);
 
     $("#unassignedCasesNumber").html(data.Unassigned);
@@ -132,22 +150,20 @@ function updateCases(data) {
     $("#OpenedCasesNumber").html(data.Opened);
 
     $("#ClosedCasesNumber").html(data.Closed);
-
 }
-function dailyCases(data,coords) {
-    let totalCases;
-    let totalOpened = 0;
-    let totalClosed = 0;
-    let totalCanceled = 0;
-    let totalUnassigned = 0;
-    let totalActive = 0;
+function dailyCases(data, coords) {
+    var totalCases = void 0;
+    var totalOpened = 0;
+    var totalClosed = 0;
+    var totalCanceled = 0;
+    var totalUnassigned = 0;
+    var totalActive = 0;
 
-    let openedDaily = [];
-    let closedDaily = [];
-    let canceledDaily = [];
-    let unassignedDaily = [];
-    let activeDaily = [];
-
+    var openedDaily = [];
+    var closedDaily = [];
+    var canceledDaily = [];
+    var unassignedDaily = [];
+    var activeDaily = [];
 
     totalOpened = totalOpened + parseInt(data.Opened);
     totalClosed = totalClosed + parseInt(data.Closed);
@@ -161,97 +177,96 @@ function dailyCases(data,coords) {
     unassignedDaily.push(parseInt(data.Unassigned));
     activeDaily.push(parseInt(data.Active));
 
-    totalCases = totalOpened + totalClosed + totalCanceled + totalUnassigned + totalActive;
+    totalCases =
+        totalOpened + totalClosed + totalCanceled + totalUnassigned + totalActive;
 
     $("#openedTickets").html("(" + totalOpened + " Tickets)");
-    $("#openedWidth").css("width", (totalOpened / totalCases * 100));
+    $("#openedWidth").css("width", (totalOpened / totalCases) * 100);
 
     $("#closedTickets").html("(" + totalClosed + " Tickets)");
-    $("#closedWidth").css("width", (totalClosed / totalCases * 100));
-
+    $("#closedWidth").css("width", (totalClosed / totalCases) * 100);
 
     $("#canceledTickets").html("(" + totalCanceled + " Tickets)");
-    $("#canceledWidth").css("width", (totalCanceled / totalCases * 100));
+    $("#canceledWidth").css("width", (totalCanceled / totalCases) * 100);
 
     $("#unassignedTickets").html("(" + totalUnassigned + " Tickets)");
-    $("#unassignedWidth").css("width", (totalUnassigned / totalCases * 100));
+    $("#unassignedWidth").css("width", (totalUnassigned / totalCases) * 100);
 
-    $("#activeWidth").css("width", (totalActive / totalCases * 100));
-    let daysSorted = [];
-    if(coords===null){
-        let days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+    $("#activeWidth").css("width", (totalActive / totalCases) * 100);
+    var daysSorted = [];
+    if (coords === null) {
+        var days = ["M", "T", "W", "T", "F", "S", "S"];
 
-        let goBackDays = 7;
-        let today = new Date();
+        var goBackDays = 7;
+        var today = new Date();
 
-        for (let i = 0; i < goBackDays; i++) {
-            let newDate = new Date(today.setDate(today.getDate() - 1));
+        for (var i = 0; i < goBackDays; i++) {
+            var newDate = new Date(today.setDate(today.getDate() - 1));
             daysSorted.push(days[newDate.getDay()]);
         }
-    }else if(coords.length===1){
-        let temp=coords[0];
-        coords[0]='previous';
-        coords[1]=temp;
-        coords[2]='next';
-        daysSorted=coords.reverse();
+    } else if (coords.length === 1) {
+        var temp = coords[0];
+        coords[0] = "previous";
+        coords[1] = temp;
+        coords[2] = "next";
+        daysSorted = coords.reverse();
+    } else {
+        var _daysSorted = coords.reverse();
     }
-    else{
-        let daysSorted=coords.reverse();
-    }
 
-    if(openedDaily.length===1){
-        let tempOpen=openedDaily[0];
-        let tempClosed=closedDaily[0];
-        let tempCanceled=canceledDaily[0];
-        let tempActive=activeDaily[0];
+    if (openedDaily.length === 1) {
+        var tempOpen = openedDaily[0];
+        var tempClosed = closedDaily[0];
+        var tempCanceled = canceledDaily[0];
+        var tempActive = activeDaily[0];
 
-        openedDaily[0]=0;
-        closedDaily[0]=0;
-        canceledDaily[0]=0;
-        activeDaily[0]=0;
-        openedDaily[2]=0;
-        closedDaily[2]=0;
-        canceledDaily[2]=0;
-        activeDaily[2]=0;
+        openedDaily[0] = 0;
+        closedDaily[0] = 0;
+        canceledDaily[0] = 0;
+        activeDaily[0] = 0;
+        openedDaily[2] = 0;
+        closedDaily[2] = 0;
+        canceledDaily[2] = 0;
+        activeDaily[2] = 0;
 
-        openedDaily[1]=tempOpen;
-        closedDaily[1]=tempClosed;
-        canceledDaily[1]=tempCanceled;
-        activeDaily[1]=tempActive;
+        openedDaily[1] = tempOpen;
+        closedDaily[1] = tempClosed;
+        canceledDaily[1] = tempCanceled;
+        activeDaily[1] = tempActive;
     }
     data = {
         labels: daysSorted.reverse(), //['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
         datasets: [
             {
-                label: 'Opened',
-                backgroundColor: 'transparent',
+                label: "Opened",
+                backgroundColor: "transparent",
                 borderColor: $.brandInfo,
-                pointHoverBackgroundColor: '#5bc0de',
+                pointHoverBackgroundColor: "#5bc0de",
                 borderWidth: 2,
                 data: openedDaily
             },
             {
-                label: 'Closed',
-                backgroundColor: 'transparent',
+                label: "Closed",
+                backgroundColor: "transparent",
                 borderColor: $.brandSuccess,
-                pointHoverBackgroundColor: '#fff',
+                pointHoverBackgroundColor: "#fff",
                 borderWidth: 2,
                 data: closedDaily
             },
             {
-                label: 'Canceled',
-                backgroundColor: 'transparent',
+                label: "Canceled",
+                backgroundColor: "transparent",
                 borderColor: $.brandSuccess,
-                pointHoverBackgroundColor: '#fff',
+                pointHoverBackgroundColor: "#fff",
                 borderWidth: 1,
                 borderDash: [8, 5],
                 data: canceledDaily
             },
             {
-                label: 'Active',
-                backgroundColor: 'transparent',
+                label: "Active",
+                backgroundColor: "transparent",
                 borderColor: $.brandWarning,
-                pointHoverBackgroundColor: '#fff',
+                pointHoverBackgroundColor: "#fff",
                 borderWidth: 1,
                 borderDash: [8, 5],
                 data: activeDaily
@@ -259,26 +274,30 @@ function dailyCases(data,coords) {
         ]
     };
 
-    let options = {
+    var options = {
         responsive: true,
         maintainAspectRatio: false,
         scales: {
-            xAxes: [{
-                gridLines: {
-                    drawOnChartArea: false,
-                },
-                ticks: {
-                    callback: function (value) {
-                        return value;
+            xAxes: [
+                {
+                    gridLines: {
+                        drawOnChartArea: false
+                    },
+                    ticks: {
+                        callback: function callback(value) {
+                            return value;
+                        }
                     }
                 }
-            }],
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true,
-                    maxTicksLimit: 5,
+            ],
+            yAxes: [
+                {
+                    ticks: {
+                        beginAtZero: true,
+                        maxTicksLimit: 5
+                    }
                 }
-            }]
+            ]
         },
         elements: {
             point: {
@@ -290,7 +309,7 @@ function dailyCases(data,coords) {
                 radius: 2,
                 hitRadius: 10,
                 hoverRadius: 3,
-                hoverBorderWidth: 3,
+                hoverBorderWidth: 3
             },
             line: {
                 tension: 0
@@ -301,60 +320,59 @@ function dailyCases(data,coords) {
         }
     };
 
-    $('#main-chart').remove();
+    $("#main-chart").remove();
 
-    $('#chartTrendDiv').append('<canvas id="main-chart"></canvas>');
+    $("#chartTrendDiv").append('<canvas id="main-chart"></canvas>');
 
-    let ctx = document.getElementById('main-chart').getContext('2d');
-    let mainChart = new Chart(ctx, {
-        type: 'line',
+    var ctx = document.getElementById("main-chart").getContext("2d");
+    var mainChart = new Chart(ctx, {
+        type: "line",
         data: data,
         options: options
     });
-
 }
 function vulTable(jsonevt) {
-    let length = jsonevt.length;
-    let maxCount=jsonevt[0].count;
-    for(let i=0;i<length;i++){
-        if(jsonevt[i].count>maxCount){
-            maxCount=jsonevt[i].count;
+    var length = jsonevt.length;
+    var maxCount = jsonevt[0].count;
+    for (var i = 0; i < length; i++) {
+        if (jsonevt[i].count > maxCount) {
+            maxCount = jsonevt[i].count;
         }
     }
     $(".rowVul").remove();
-    for (let i = 0; i < length; i++) {
-        let rowInfo = {
-            "tName": "",
-            "attacker": "",
-            "shn": "",
-            "victim": "",
-            "dhn": "",
-            "severity": "",
-            "count": ""
+    for (var _i = 0; _i < length; _i++) {
+        var rowInfo = {
+            tName: "",
+            attacker: "",
+            shn: "",
+            victim: "",
+            dhn: "",
+            severity: "",
+            count: ""
         };
 
-        rowInfo.tName = jsonevt[i].threatid;
-        rowInfo.attacker = jsonevt[i].src;
-        rowInfo.shn = jsonevt[i].resolved_src;
-        rowInfo.victim = jsonevt[i].dst;
-        rowInfo.dhn = jsonevt[i].resolved_dst;
-        rowInfo.severity = jsonevt[i].severity_of_threatid;
-        rowInfo.count = jsonevt[i].count;
+        rowInfo.tName = jsonevt[_i].threatid;
+        rowInfo.attacker = jsonevt[_i].src;
+        rowInfo.shn = jsonevt[_i].resolved_src;
+        rowInfo.victim = jsonevt[_i].dst;
+        rowInfo.dhn = jsonevt[_i].resolved_dst;
+        rowInfo.severity = jsonevt[_i].severity_of_threatid;
+        rowInfo.count = jsonevt[_i].count;
 
-        let table = document.getElementById("vulTable");
+        var table = document.getElementById("vulTable");
 
-        let row = document.createElement("tr");
+        var row = document.createElement("tr");
 
         row.className = "rowVul";
         row.data = rowInfo;
 
-        let c1 = document.createElement("td");
-        let c2 = document.createElement("td");
-        let c3 = document.createElement("td");
-        let c4 = document.createElement("td");
-        let c5 = document.createElement("td");
-        let c6 = document.createElement("td");
-        let c7 = document.createElement("td");
+        var c1 = document.createElement("td");
+        var c2 = document.createElement("td");
+        var c3 = document.createElement("td");
+        var c4 = document.createElement("td");
+        var c5 = document.createElement("td");
+        var c6 = document.createElement("td");
+        var c7 = document.createElement("td");
 
         if (rowInfo.severity === "critical") {
             c7.style.color = "red";
@@ -376,7 +394,6 @@ function vulTable(jsonevt) {
         c6.style.width = "25%";
         c7.style.width = "25%";
 
-
         c1.style.fontSize = "0.85em";
         c2.style.fontSize = "0.85em";
         c3.style.fontSize = "0.85em";
@@ -385,16 +402,22 @@ function vulTable(jsonevt) {
         c6.style.fontSize = "0.85em";
         c7.style.fontSize = "0.85em";
 
-        let percCount = (rowInfo.count / maxCount).toFixed(1) * 100;
+        var percCount = (rowInfo.count / maxCount).toFixed(1) * 100;
         c1.innerHTML = rowInfo.tName;
         c2.innerHTML = rowInfo.shn;
         c3.innerHTML = rowInfo.attacker;
         c4.innerHTML = rowInfo.dhn;
         c5.innerHTML = rowInfo.victim;
-        c6.innerHTML = "<div class='row'><div class='col-sm-3' style='text-align:right'>" + rowInfo.count + "</div>" +
+        c6.innerHTML =
+            "<div class='row'><div class='col-sm-3' style='text-align:right'>" +
+            rowInfo.count +
+            "</div>" +
             "<div class='progress progress-xs col-sm-6' style='height:10px; padding-left:7px !important;'>" +
-            "<div class='progress-bar bg-danger' role='progressbar' style='width: " + percCount +
-            "%' aria-valuenow='50' aria-valuemin='0' aria-valuemax='" + maxCount + "'></div></div></div>";
+            "<div class='progress-bar bg-danger' role='progressbar' style='width: " +
+            percCount +
+            "%' aria-valuenow='50' aria-valuemin='0' aria-valuemax='" +
+            maxCount +
+            "'></div></div></div>";
         c7.innerHTML = rowInfo.severity;
 
         row.appendChild(c1);
@@ -407,37 +430,37 @@ function vulTable(jsonevt) {
     }
 }
 function tableScrollSrcs() {
-    let maxRows = 11;
-    let table = document.getElementById("sourcesTable");
-    let wrapper = table.parentNode;
-    let rowsInTable = table.rows.length;
-    let height = 0;
+    var maxRows = 11;
+    var table = document.getElementById("sourcesTable");
+    var wrapper = table.parentNode;
+    var rowsInTable = table.rows.length;
+    var height = 0;
 
     if (rowsInTable > maxRows) {
-        for (let i = 0; i < maxRows; i++) {
+        for (var i = 0; i < maxRows; i++) {
             height += table.rows[i].clientHeight;
         }
         wrapper.style.height = height + "px";
     }
 }
-function srcsTable(jsonevt, maxBytes,maxSessions) {
-    let length = jsonevt.length;
+function srcsTable(jsonevt, maxBytes, maxSessions) {
+    var length = jsonevt.length;
 
     $(".rowClassSrcs").remove();
     //let placeRowInTable=1;
-    for (let i = 0; i < length; i++) {
-        let rowInfo = {
-            "src": "",
-            "resolvedSrc": "",
-            "sessions": "",
-            "bytes": ""
+    for (var i = 0; i < length; i++) {
+        var rowInfo = {
+            src: "",
+            resolvedSrc: "",
+            sessions: "",
+            bytes: ""
         };
-        let intMaxBytes = maxBytes;
+        var intMaxBytes = maxBytes;
         rowInfo.src = jsonevt[i].src;
         rowInfo.resolvedSrc = jsonevt[i].resolved_src;
         rowInfo.sessions = jsonevt[i].sessions;
         rowInfo.bytes = jsonevt[i].bytes;
-        let intBytes = rowInfo.bytes;
+        var intBytes = rowInfo.bytes;
         if (rowInfo.bytes >= 1000000000) {
             rowInfo.bytes = rowInfo.bytes / 1000000000;
             rowInfo.bytes = "" + rowInfo.bytes.toFixed(1) + "G";
@@ -456,17 +479,17 @@ function srcsTable(jsonevt, maxBytes,maxSessions) {
             maxBytes = maxBytes / 100000000;
             maxBytes = "" + maxBytes + "M";
         }
-        let percBytes = (intBytes / intMaxBytes).toFixed(2) * 100;
-        let table = document.getElementById("sourcesTable");
+        var percBytes = (intBytes / intMaxBytes).toFixed(2) * 100;
+        var table = document.getElementById("sourcesTable");
 
-        let row = document.createElement("tr");
+        var row = document.createElement("tr");
         row.className = "rowClassSrcs";
         row.data = rowInfo;
 
-        let c1 = document.createElement("td");
-        let c2 = document.createElement("td");
-        let c3 = document.createElement("td");
-        let c4 = document.createElement("td");
+        var c1 = document.createElement("td");
+        var c2 = document.createElement("td");
+        var c3 = document.createElement("td");
+        var c4 = document.createElement("td");
 
         c1.style.width = "15%";
         c2.style.width = "15%";
@@ -478,20 +501,30 @@ function srcsTable(jsonevt, maxBytes,maxSessions) {
         c3.style.fontSize = "0.85em";
         c4.style.fontSize = "0.85em";
 
-        let intSessions = parseInt(rowInfo.sessions);
-        let percSessions = (intSessions / parseInt(maxSessions)).toFixed(2) * 100;
+        var intSessions = parseInt(rowInfo.sessions);
+        var percSessions = (intSessions / parseInt(maxSessions)).toFixed(2) * 100;
 
         c1.innerHTML = rowInfo.resolvedSrc;
         c2.innerHTML = rowInfo.src;
 
-        c3.innerHTML = "<div class='row'><div class='col-sm-3' style='text-align:right'>" + rowInfo.sessions +
+        c3.innerHTML =
+            "<div class='row'><div class='col-sm-3' style='text-align:right'>" +
+            rowInfo.sessions +
             "</div><div class='progress progress-xs col-sm-6' style='height:10px; padding-left: 5px !important;'>" +
-            "<div class='progress-bar bg-success spec' role='progressbar' style='width: " + percSessions +
-            "%' aria-valuenow='50' aria-valuemin='0' aria-valuemax='" + maxSessions + "'></div></div></div>";
-        c4.innerHTML = "<div class='row'><div class='col-sm-3' style='text-align:right'>" + rowInfo.bytes
-            + "</div><div class='progress progress-xs col-sm-6' style='height:10px; padding-left: 5px !important;'>" +
-            "<div class='progress-bar bg-info' role='progressbar' style='width: " + percBytes +
-            "%' aria-valuenow='50' aria-valuemin='0' aria-valuemax='" + intMaxBytes + "'></div></div></div>";
+            "<div class='progress-bar bg-success spec' role='progressbar' style='width: " +
+            percSessions +
+            "%' aria-valuenow='50' aria-valuemin='0' aria-valuemax='" +
+            maxSessions +
+            "'></div></div></div>";
+        c4.innerHTML =
+            "<div class='row'><div class='col-sm-3' style='text-align:right'>" +
+            rowInfo.bytes +
+            "</div><div class='progress progress-xs col-sm-6' style='height:10px; padding-left: 5px !important;'>" +
+            "<div class='progress-bar bg-info' role='progressbar' style='width: " +
+            percBytes +
+            "%' aria-valuenow='50' aria-valuemin='0' aria-valuemax='" +
+            intMaxBytes +
+            "'></div></div></div>";
         //console.log('percbytes: ' + percBytes);
         row.appendChild(c1);
         row.appendChild(c2);
@@ -502,206 +535,232 @@ function srcsTable(jsonevt, maxBytes,maxSessions) {
         tableScrollSrcs();
     }
 }
-function delayGraph(data,val) {
-    let value = val;
-    let dateNow=new Date();
-    let hourNow=dateNow.getHours();
-    let minuteNow=dateNow.getMinutes();
-    let xaxis=[];
-    let xCoord=hourNow+":"+minuteNow;
+function delayGraph(data, val) {
+    var value = val;
+    var dateNow = new Date();
+    var hourNow = dateNow.getHours();
+    var minuteNow = dateNow.getMinutes();
+    var xaxis = [];
+    var xCoord = hourNow + ":" + minuteNow;
     xaxis.push(xCoord);
-    for(let i=0;i<30;i++){
-        minuteNow=minuteNow-2;
-        if(minuteNow<0){
-            hourNow=hourNow-1;
-            minuteNow=59;
+    for (var i = 0; i < 30; i++) {
+        minuteNow = minuteNow - 2;
+        if (minuteNow < 0) {
+            hourNow = hourNow - 1;
+            minuteNow = 59;
         }
-        xCoord=hourNow+":"+minuteNow;
+        xCoord = hourNow + ":" + minuteNow;
         xaxis.push(xCoord);
     }
-    let xSorted=[];
+    var xSorted = [];
     if (value === 24.0) {
-        let days = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
-        let timeNow = new Date();
-        let hrNow = timeNow.getHours();
-        let hrsFirstPart = days.slice(hrNow, days.length);
-        let hrsSecondPart = days.slice(0, hrNow + 1);
+        var days = [
+            "00:00",
+            "01:00",
+            "02:00",
+            "03:00",
+            "04:00",
+            "05:00",
+            "06:00",
+            "07:00",
+            "08:00",
+            "09:00",
+            "10:00",
+            "11:00",
+            "12:00",
+            "13:00",
+            "14:00",
+            "15:00",
+            "16:00",
+            "17:00",
+            "18:00",
+            "19:00",
+            "20:00",
+            "21:00",
+            "22:00",
+            "23:00"
+        ];
+        var timeNow = new Date();
+        var hrNow = timeNow.getHours();
+        var hrsFirstPart = days.slice(hrNow, days.length);
+        var hrsSecondPart = days.slice(0, hrNow + 1);
         xSorted = hrsFirstPart.concat(hrsSecondPart);
         xSorted.reverse();
     } else if (value === 1.0) {
-        let dateNow=new Date();
-        let hourNow=dateNow.getHours();
-        let minuteNow=dateNow.getMinutes();
-        xSorted=[];
-        let xCoord=hourNow+":"+minuteNow;
-        xSorted.push(xCoord);
-        for(let i=0;i<28;i++){
-            minuteNow=minuteNow-2;
-            if(minuteNow<0){
-                hourNow=hourNow-1;
-                minuteNow=59;
-            }
-            if(minuteNow<10){
-                minuteNow="0"+minuteNow;
-            }
-            xCoord=hourNow+":"+minuteNow;
-            xSorted.push(xCoord);
-        }
-
-
-    } else if (value === 144.0) {
-        let timeNow = new Date();
-        let hrNow = timeNow.getHours();
-        let dateNow = timeNow.getDate();
+        var _dateNow = new Date();
+        var _hourNow = _dateNow.getHours();
+        var _minuteNow = _dateNow.getMinutes();
         xSorted = [];
-        for (let i = 0; i < 30; i++) {
-            timeNow = new Date();
-            let newDate = new Date(timeNow.setHours(timeNow.getHours() - (i * 6)));
-            let month = monthNames[newDate.getMonth()];
-            let day = newDate.getDate();
-            let hour = newDate.getHours();
-            let minutes = newDate.getMinutes();
-            let strTime = hour+ ":" + minutes;
-            if((hour<6)||(i===29)){
+        var _xCoord = _hourNow + ":" + _minuteNow;
+        xSorted.push(_xCoord);
+        for (var _i2 = 0; _i2 < 28; _i2++) {
+            _minuteNow = _minuteNow - 2;
+            if (_minuteNow < 0) {
+                _hourNow = _hourNow - 1;
+                _minuteNow = 59;
+            }
+            if (_minuteNow < 10) {
+                _minuteNow = "0" + _minuteNow;
+            }
+            _xCoord = _hourNow + ":" + _minuteNow;
+            xSorted.push(_xCoord);
+        }
+    } else if (value === 144.0) {
+        var _timeNow = new Date();
+        var _hrNow = _timeNow.getHours();
+        var _dateNow2 = _timeNow.getDate();
+        xSorted = [];
+        for (var _i3 = 0; _i3 < 30; _i3++) {
+            _timeNow = new Date();
+            var newDate = new Date(_timeNow.setHours(_timeNow.getHours() - _i3 * 6));
+            var month = monthNames[newDate.getMonth()];
+            var day = newDate.getDate();
+            var hour = newDate.getHours();
+            var minutes = newDate.getMinutes();
+            var strTime = hour + ":" + minutes;
+            if (hour < 6 || _i3 === 29) {
                 strTime = day + "/" + month;
-            }else if((hour>6)&&(hour<12)){
-                hour="6";
-                minutes="00";
+            } else if (hour > 6 && hour < 12) {
+                hour = "6";
+                minutes = "00";
                 //strTime = hour+ ":" + minutes;
-            }else if((hour>12)&&(hour<18)){
-                hour="12";
-                minutes="00";
+            } else if (hour > 12 && hour < 18) {
+                hour = "12";
+                minutes = "00";
                 //strTime = hour+ ":" + minutes;
-            }else if(hour>18){
-                hour="18";
-                minutes="00";
+            } else if (hour > 18) {
+                hour = "18";
+                minutes = "00";
                 //strTime = hour+ ":" + minutes;
             }
 
             xSorted.push(strTime);
         }
-
     } else {
-        let timeNow = new Date();
-        let xSorted = [];
-        for (let i = 0; i < 30; i++) {
-            timeNow = new Date();
-            let newDate = new Date(timeNow.setDate(timeNow.getDate() - (i)));
-            let month = monthNames[newDate.getMonth()];
-            let day = newDate.getDate();
-            let strTime = day + "/" + month;
-            xSorted.push(strTime);
+        var _timeNow2 = new Date();
+        var _xSorted = [];
+        for (var _i4 = 0; _i4 < 30; _i4++) {
+            _timeNow2 = new Date();
+            var _newDate = new Date(_timeNow2.setDate(_timeNow2.getDate() - _i4));
+            var _month = monthNames[_newDate.getMonth()];
+            var _day = _newDate.getDate();
+            var _strTime = _day + "/" + _month;
+            _xSorted.push(_strTime);
         }
     }
 
-    let lineChartData = {
+    var lineChartData = {
         labels: xSorted.reverse(),
         datasets: [
             {
-                label: 'Antarctica',
-                backgroundColor: 'transparent',
-                borderColor: 'red',
+                label: "Antarctica",
+                backgroundColor: "transparent",
+                borderColor: "red",
                 borderWidth: 2,
-                pointHoverBackgroundColor: '#fff',
+                pointHoverBackgroundColor: "#fff",
                 data: data.Antartica
             },
             {
-                label: 'Australia',
-                backgroundColor: 'transparent',
-                borderColor: 'brown',
+                label: "Australia",
+                backgroundColor: "transparent",
+                borderColor: "brown",
                 borderWidth: 2,
-                pointHoverBackgroundColor: '#fff',
+                pointHoverBackgroundColor: "#fff",
                 data: data.Australia
             },
             {
-                label: 'Brazil',
-                backgroundColor: 'transparent',
-                borderColor: 'yellow',
+                label: "Brazil",
+                backgroundColor: "transparent",
+                borderColor: "yellow",
                 borderWidth: 2,
-                pointHoverBackgroundColor: '#fff',
+                pointHoverBackgroundColor: "#fff",
                 data: data.Brazil
             },
             {
-                label: 'Egypt',
-                backgroundColor: 'transparent',
-                borderColor: 'pink',
+                label: "Egypt",
+                backgroundColor: "transparent",
+                borderColor: "pink",
                 borderWidth: 2,
-                pointHoverBackgroundColor: '#fff',
+                pointHoverBackgroundColor: "#fff",
                 data: data.Egypt
             },
             {
-                label: 'Japan',
-                backgroundColor: 'transparent',
-                borderColor: 'blue',
+                label: "Japan",
+                backgroundColor: "transparent",
+                borderColor: "blue",
                 borderWidth: 2,
-                pointHoverBackgroundColor: '#fff',
+                pointHoverBackgroundColor: "#fff",
                 data: data.Japan
             },
             {
-                label: 'UK',
-                backgroundColor: 'transparent',
-                borderColor: '#5FFFDD',
+                label: "UK",
+                backgroundColor: "transparent",
+                borderColor: "#5FFFDD",
                 borderWidth: 2,
-                pointHoverBackgroundColor: '#fff',
+                pointHoverBackgroundColor: "#fff",
                 data: data.UK
             },
             {
-                label: 'USA',
-                backgroundColor: 'transparent',
-                borderColor: 'purple',
+                label: "USA",
+                backgroundColor: "transparent",
+                borderColor: "purple",
                 borderWidth: 2,
-                pointHoverBackgroundColor: '#fff',
+                pointHoverBackgroundColor: "#fff",
                 data: data.USA
             },
             {
-                label: 'UAE',
-                backgroundColor: 'transparent',
-                borderColor: '#347D65',
+                label: "UAE",
+                backgroundColor: "transparent",
+                borderColor: "#347D65",
                 borderWidth: 2,
-                pointHoverBackgroundColor: '#fff',
+                pointHoverBackgroundColor: "#fff",
                 data: data.UAE
             }
         ]
     };
-    let options = {
+    var options = {
         responsive: true,
         maintainAspectRatio: false,
         legend: {
             display: true
         },
         scales: {
-            xAxes: [{
-                gridLines: {
-                    drawOnChartArea: false,
-                },
-                ticks: {
-                    callback: function (value) {
-                        //indexDay=value;
-                        return value;
+            xAxes: [
+                {
+                    gridLines: {
+                        drawOnChartArea: false
+                    },
+                    ticks: {
+                        callback: function callback(value) {
+                            //indexDay=value;
+                            return value;
+                        }
                     }
                 }
-            }],
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
-                    //maxTicksLimit: 5,
-                    //max: 200,
-                    //min: 0
+            ],
+            yAxes: [
+                {
+                    ticks: {
+                        beginAtZero: true
+                        //maxTicksLimit: 5,
+                        //max: 200,
+                        //min: 0
+                    }
                 }
-            }]
+            ]
         },
         elements: {
             point: {
                 radius: 0,
                 hitRadius: 10,
                 hoverRadius: 4,
-                hoverBorderWidth: 3,
+                hoverBorderWidth: 3
             }
         }
     };
-    let ctx = document.getElementById('delayCanvas');
-    let chart = new Chart(ctx, {
-        type: 'line',
+    var ctx = document.getElementById("delayCanvas");
+    var chart = new Chart(ctx, {
+        type: "line",
         data: lineChartData,
         options: options
     });
@@ -712,5 +771,5 @@ function delayGraph(data,val) {
         legend: {
             display: false
         }
-    }
+    };
 }
