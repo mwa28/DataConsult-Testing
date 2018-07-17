@@ -11,7 +11,7 @@ module.exports = function(config) {
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['jquery-3.3.1','qunit'],
-    plugins: ['karma-jquery', 'karma-qunit', 'karma-electron-launcher'],
+    plugins: ['karma-jquery', 'karma-qunit', 'karma-nightmare'],
 
 
       // list of files / patterns to load in the browser
@@ -58,12 +58,12 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Electron'],
-    electronOpts: {
+    browsers: ['Nightmare'],
+    nightmareOptions: {
         width: 800,
         height: 800,
         show: false
-        // ...
+    // ...
     },
 
     // Continuous Integration mode
