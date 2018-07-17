@@ -671,7 +671,7 @@ QUnit.test("Vul Table Test", function (assert) {
             count: "-3"  /** Unhandled */
         }
     ];
-    let expected_data = "100%";
+    let expected_data = "61px";
     test_vulTable(data, expected_data);
 });
 
@@ -700,7 +700,7 @@ QUnit.test("Src Table Test", function (assert) {
             bytes: 100000000
         }
     ];
-    let expected_data = "48%";
+    let expected_data = "55.6719px";
     test_srcTable(data, expected_data);
 });
 
