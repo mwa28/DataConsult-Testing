@@ -664,7 +664,7 @@ QUnit.test("Src Table Test", function(assert){
     $('#qunit-fixture').append('<div id="sources"><table id="sourcesTable"><tbody><tr class="rowClassSrcs"></tr></tbody></table></div>');
     function test_srcTable(data,expected_data) {
         app.srcsTable(data,256500000,250,document, $);
-        let test = $('.spec:first').css('width')
+        let test = $('.spec:first').css('width');
         //console.log(test);
         assert.equal(test,expected_data, "The result should be " + expected_data);
     }

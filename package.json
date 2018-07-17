@@ -8,7 +8,7 @@
     "app": "app"
   },
   "scripts": {
-    "test": "qunit test/test.js"
+    "test": "cucumber-js"
   },
   "repository": {
     "type": "git",
@@ -22,6 +22,7 @@
   "homepage": "https://gitlab.com/mwa28/DataConsult-Testing#README",
   "devDependencies": {
     "canvas-prebuilt": "^1.6.5-prerelease.1",
+    "cucumber": "^4.2.1",
     "jquery": "^3.3.1",
     "jsdom": "^11.11.0",
     "qunit": "^2.6.1"
