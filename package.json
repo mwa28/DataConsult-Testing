@@ -22,9 +22,11 @@
   "homepage": "https://gitlab.com/mwa28/DataConsult-Testing#README",
   "devDependencies": {
     "canvas-prebuilt": "^1.6.5-prerelease.1",
+    "chai": "^4.1.2",
     "cucumber": "^4.2.1",
     "jquery": "^3.3.1",
     "jsdom": "^11.11.0",
+    "moment": "^2.22.2",
     "qunit": "^2.6.1"
   }
 }

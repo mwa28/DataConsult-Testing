@@ -1,10 +1,4 @@
-let datesTable = JSON.stringify([
-    new Date(2008,5,3,8,56,39),
-    new Date(2009,6,5,8,7,2),
-    new Date(2008,1,3,5,56,36),
-    new Date (2003,5,20,5,30,15)
-]);
-
+const moment = require('moment');
 let monthNames = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 function tableScrollSrcs(document) {
@@ -23,11 +17,12 @@ function tableScrollSrcs(document) {
 }
 module.exports = {
     nextDateButton: function (earliestDate,$) {
-        let dateEarly = new Date(earliestDate);
-        let dateFrom = new Date(dateEarly.getTime() - (30 * 86400000));
-        $('#next').append(JSON.stringify({dateEarly, dateFrom}));
+        let dateEarly = moment(new Date(earliestDate)).format('LLL');
+        let dateEarly_wrap = new Date(earliestDate);
+        let dateFrom = moment(new Date(dateEarly_wrap.getTime() - (30 * 86400000))).format('LLL');
+        $('#next').append(JSON.stringify([dateFrom,dateEarly]));
     },
-    previousDateButton: function (document, $) {
+    previousDateButton: function (datesTable,$) {
 
         let jsonArr = JSON.parse(datesTable);
         jsonArr.pop();
@@ -38,12 +33,13 @@ module.exports = {
         jsonArr.pop();
         jsonArr = JSON.stringify(jsonArr);
         datesTable = jsonArr;
-        return {to, start};
+        $('#previous').append(JSON.stringify([moment(start).format('LLL'), moment(to).format('LLL')]));
     },
-    firstDateButton: function (document, $) {
+    firstDateButton: function ($) {
         let to = new Date();
-        let start = new Date(to.getTime() - (150 * 86400000));
-        return {to: to, start: start};
+        let to_wrap = moment(to).format('LLL');
+        let start = moment(new Date(to.getTime() - (150 * 86400000))).format('LLL');
+        $('#first').text(JSON.stringify([to_wrap, start]));
     },
     insightsClient : function (data,document, $) {
 
