@@ -717,6 +717,7 @@ QUnit.test("Delay Graph Test", function(assert){
         USA:        randomArray(),
         UAE:        randomArray()
     };
+    console.log(data);
     let expected_data=true;
     test_delayGraph(data,expected_data);
 });

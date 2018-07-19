@@ -75,20 +75,18 @@ module.exports = {
     }
 },
     latestTickets : function (data,document, $) {
-    if (data.length !== 0) {
-        /**Error handling: Case when data length = 1*/
-        earliestDate = data[data.length - 1].Date;
+    /*if (data.length !== 0) {
+        /!**Error handling: Case when data length = 1*!/
+        //earliestDate = data[data.length - 1].Date;
         let arr = datesTable;
         if (arr === "") {
             let dates = [data[data.length - 1].Date, data[0].Date];
-            datesTable = JSON.stringify(dates);
         }
         else {
             let arrJSON = JSON.parse(arr);
             arrJSON.push(data[data.length - 1].Date, data[0].Date);
-            datesTable = JSON.stringify(arrJSON);
         }
-    }
+    }*/
     let table = document.getElementById("ticketsTable");
     $(".latestTicketsRows").remove();
     for (let i = 0; i < data.length; i++) {
@@ -610,7 +608,7 @@ module.exports = {
                 borderColor: 'red',
                 borderWidth: 2,
                 pointHoverBackgroundColor: '#fff',
-                data: data.Antartica
+                data: data.Antarctica
             },
             {
                 label: 'Australia',
