@@ -508,16 +508,3 @@ Then(/^I should get from (.*) to (.*)$/, function (dateFrom, dateTo) {
 Then(/^it should pass$/, function () {
     expect(true).to.equal(true);
 });
-
-/*
-QUnit.test("Daily Cases Test", function(assert){
-    function test_dailyCases(data,expected_data) {
-
-        let test = $('#openedTickets').html();
-        assert.equal(test,expected_data, "The result should be " + expected_data);
-    }
-
-    let expected_data="(-56 Tickets)";
-    test_dailyCases(data,expected_data);
-    console.log('done');
-});*/
