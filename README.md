@@ -14,5 +14,5 @@ Checkout other branches:
 * [Karma with JSDOM](https://github.com/mwa28/DataConsult-Testing/tree/karma-headless)
 * [Karma with Electron](https://github.com/mwa28/DataConsult-Testing/tree/karma-electron)
 * [Karma with Nightmare](https://github.com/mwa28/DataConsult-Testing/tree/karma-nightmare)
-* [Behavior Driven - Customer Oriented](https://github.com/mwa28/DataConsult-Testing/tree/cucumber) <a href="https://cucumber.io"><img src="https://cdn.worldvectorlogo.com/logos/cucumber.svg" alt="Cucumber" width="25" height="25" href="https://cucumber.io"></a>
+* [Behavior Driven - Customer Oriented](https://github.com/mwa28/DataConsult-Testing/tree/cucumber) <a href="https://cucumber.io"><img src="https://cdn.worldvectorlogo.com/logos/cucumber.svg" alt="Cucumber" width="15" height="15" href="https://cucumber.io"></a>
 ## [GitLab Version](https://gitlab.com/mwa28/DataConsult-Testing)
